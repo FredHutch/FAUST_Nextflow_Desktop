@@ -60,7 +60,8 @@
             "app.html",
             "main.prod.js",
             "main.prod.js.map",
-            "package.json"
+            "package.json",
+            "binaries"
         ],
         "dmg": {
             "contents": [
@@ -293,6 +294,7 @@
         "reactstrap": "^8.4.1",
         "redux": "^4.0.5",
         "redux-thunk": "^2.3.0",
+        "request": "^2.88.2",
         "source-map-support": "^0.5.16"
     },
     "devEngines": {

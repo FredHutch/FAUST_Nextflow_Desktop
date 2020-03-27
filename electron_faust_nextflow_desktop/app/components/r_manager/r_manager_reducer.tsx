@@ -27,6 +27,8 @@ export enum RManagerStatus {
     // ---
     REQUEST_R_DOWNLOAD = 'REQUEST_R_DOWNLOAD',
     DOWNLOADING_R = 'DOWNLOADING_R',
+    REQUEST_R_CONFIGURATION = 'REQUEST_R_CONFIGURATION',
+    CONFIGURING_R = 'CONFIGURING_R',
     // ---
     CONFIGURING = 'CONFIGURING',
     READY = 'READY',
@@ -43,14 +45,25 @@ export interface IExecCommand {
     standard_output: string | null;
     error_output: string | null;
 }
+const default_exec_command = {
+    command: null,
+    command_error: null,
+    error: null,
+    standard_output: null,
+    error_output: null
+};
 export interface IFAUSTExecutionOutput {
     //
 }
 export interface IRManagerState {
+    was_download_triggered: boolean;
+    download_command: IExecCommand;
     status: RManagerStatus;
 }
 
 export const default_r_manager_state: IRManagerState = {
+    was_download_triggered: false,
+    download_command: default_exec_command,
     status: RManagerStatus.NEW
 };
 
