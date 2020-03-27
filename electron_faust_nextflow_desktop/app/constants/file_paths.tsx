@@ -32,7 +32,7 @@ export const getFAUSTWorkingDirectoryPath = () => {
 
 export const getBinariesDirectoryPath = () => {
     const binaries_directory = path.join(
-        app.getPath('appData'),
+        app.getAppPath(),
         binaries_directory_name
     );
     return binaries_directory;
@@ -40,9 +40,12 @@ export const getBinariesDirectoryPath = () => {
 
 export const getRPackageFilePath = () => {
     // const r_package_file_path = path.join(getBinariesDirectoryPath(), 'r.pkg');
+    // TODO: Correct management for os
     const r_package_file_path = path.join(
-        '/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/a_testing_directory/',
-        'r.pkg'
+        getBinariesDirectoryPath(),
+        'r',
+        'r-mac',
+        'R'
     );
     return r_package_file_path;
 };
