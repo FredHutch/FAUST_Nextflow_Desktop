@@ -31,10 +31,25 @@ export const getFAUSTWorkingDirectoryPath = () => {
 };
 
 export const getBinariesDirectoryPath = () => {
-    const binaries_directory = path.join(
-        app.getAppPath(),
-        binaries_directory_name
-    );
+    let app_path: null | string = null;
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.DEBUG_PROD);
+    if (
+        process.env.NODE_ENV === 'development' ||
+        process.env.DEBUG_PROD === 'true'
+    ) {
+        app_path = path.join('app');
+    } else {
+        app_path = path.join(app.getAppPath(), '..');
+    }
+    console.log('APP PATH: ' + app_path);
+    const binaries_directory = path.join(app_path, binaries_directory_name);
+    // const binaries_directory = path.join(
+    //     app.getAppPath(),
+    //     '..',
+    //     'resources',
+    //     binaries_directory_name
+    // );
     return binaries_directory;
 };
 
@@ -47,5 +62,6 @@ export const getRPackageFilePath = () => {
         'r-mac',
         'R'
     );
+    console.log('R_Package_path: ' + r_package_file_path);
     return r_package_file_path;
 };

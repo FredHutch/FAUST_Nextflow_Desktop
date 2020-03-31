@@ -35,7 +35,7 @@ import {
     FAUSTSubmissionFormReducerActionType,
     FAUSTSubmissionFormStateContext
 } from './faust_submission_form_reducer';
-import { ProfileSelectorForm } from './profile_selector_form.tsx';
+import { ProfileSelectorForm } from './profile_selector_form';
 // ../
 import {
     NextflowManagerStateContext,
@@ -52,16 +52,16 @@ import {
     FAUSTCommand,
     FAUSTNextflowProfile,
     generateNextflowRunCommand,
-    generateNextflowRunOptions,
-    NextflowUserRunOptions
+    generateNextflowRunOptions
+    // NextflowUserRunOptions
 } from '../../constants/constants';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
 import {
-    getErrorPagePath,
-    getProcessingPagePath,
-    getResultsPagePath
+    // getErrorPagePath,
+    getProcessingPagePath
+    // getResultsPagePath
 } from '../../constants/app_paths';
 
 interface IProps {
@@ -232,7 +232,7 @@ export const FAUSTSubmissionForm = (props: IProps) => {
     //         ...local_debug_state,
     //         was_debug_redirect_fired: true
     //     });
-    //     history.push(getErrorPagePath());
+    history.push(getErrorPagePath());
     // }
     // -------------------------------------------------------------------------
 

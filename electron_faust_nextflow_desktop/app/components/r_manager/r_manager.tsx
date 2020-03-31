@@ -125,7 +125,7 @@ export const RManager = (props: IProps) => {
                 type: RManagerReducerActionType.SET_STATUS
             });
             const r_executable_file_path = getRPackageFilePath();
-            console.log(r_executable_file_path);
+            // console.log(r_executable_file_path);
 
             const command = `${r_executable_file_path} --help`;
             child_process.exec(command, function(
