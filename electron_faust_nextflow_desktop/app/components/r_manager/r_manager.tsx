@@ -3,12 +3,10 @@
 // -----------------------------------------------------------------------------
 const child_process = require('child_process');
 const fs = require('fs');
-const path = require('path');
-const process = require('process');
 // -----------------------------------------------------------------------------
 // Electron
 // -----------------------------------------------------------------------------
-const app = require('electron').remote.app;
+// N/A
 // -----------------------------------------------------------------------------
 // Electron
 // -----------------------------------------------------------------------------
@@ -16,34 +14,10 @@ const app = require('electron').remote.app;
 // -----------------------------------------------------------------------------
 // Third-Party Libraries
 // -----------------------------------------------------------------------------
-const request = require('request');
 import React from 'react';
 // -----------------------------------------------------------------------------
 // Custom Components
 // -----------------------------------------------------------------------------
-// ./
-// import {
-//     FAUSTExecutorDispatchContext,
-//     FAUSTExecutorReducerActionType,
-//     FAUSTExecutorStateContext,
-//     FAUSTExecutorStatus
-// } from './faust_executor_reducer';
-// // ../
-// import {
-//     NextflowManagerStateContext,
-//     NextflowManagerStatus
-// } from '../nextflow_manager';
-// import {
-//     FAUSTSubmissionFormStateContext,
-//     IFAUSTAWSSubmissionFormState
-// } from '../faust_submission_form';
-// // ../../
-// import {
-//     default_faust_nextflow_github_tag,
-//     default_faust_nextflow_github_url,
-//     generateNextflowRunCommand,
-//     generateNextflowRunOptions
-// } from '../../constants/constants';
 import {
     RManagerDispatchContext,
     RManagerReducerActionType,
@@ -68,9 +42,9 @@ export const RManager = (props: IProps) => {
     // -----------
     // Local State
     // -----------
-    // const [local_state, setLocalState] = React.useState({
-    //     was_execution_triggered: false
-    // });
+    const [local_state, setLocalState] = React.useState({
+        was_configuration_executed: false
+    });
     // -----------
     // Hooks
     // -----------
@@ -80,23 +54,10 @@ export const RManager = (props: IProps) => {
     // -----------
     const r_manager_state = React.useContext(RManagerStateContext);
     const rManagerDispatch: any = React.useContext(RManagerDispatchContext);
-    // const faust_executor_state = React.useContext(FAUSTExecutorStateContext);
-    // const faustExecutorDispatch: any = React.useContext(
-    //     FAUSTExecutorDispatchContext
-    // );
-    // // ---
-    // const nextflow_manager_state = React.useContext(
-    //     NextflowManagerStateContext
-    // );
-    // // ---
-    // const faust_submission_form_state = React.useContext(
-    //     FAUSTSubmissionFormStateContext
-    // );
     // -----------
     // Helpers
     // -----------
     // N/A
-    const r_download_url = 'https://cloud.r-project.org/bin/macosx/R-3.5.1.pkg';
 
     // -------------------------------------------------------------------------
     // Logic
@@ -114,34 +75,71 @@ export const RManager = (props: IProps) => {
         if (r_manager_state.status === RManagerStatus.NEW) {
             rManagerDispatch({
                 payload: {},
-                type: RManagerReducerActionType.DOWNLOAD_R
+                type: RManagerReducerActionType.CONFIGURE_R
             });
         }
     });
-    React.useEffect(() => {
-        if (r_manager_state.status === RManagerStatus.REQUEST_R_DOWNLOAD) {
-            rManagerDispatch({
-                payload: { status: RManagerStatus.DOWNLOADING_R },
-                type: RManagerReducerActionType.SET_STATUS
-            });
-            const r_executable_file_path = getRPackageFilePath();
-            // console.log(r_executable_file_path);
 
-            const command = `${r_executable_file_path} --help`;
-            child_process.exec(command, function(
-                error: any,
-                standard_out: any,
-                standard_error: any
-            ) {
-                console.log(
-                    '---------------------------------\nCommand was run!\n---------------------------------'
-                );
-                console.log(error);
-                console.log(standard_out);
-                console.log(standard_error);
+    React.useEffect(() => {
+        if (r_manager_state.status === RManagerStatus.REQUEST_R_CONFIGURATION) {
+            rManagerDispatch({
+                payload: { status: RManagerStatus.CONFIGURING_R },
+                type: RManagerReducerActionType.SET_STATUS
             });
         }
     }, [r_manager_state.status]);
+
+    React.useEffect(() => {
+        if (r_manager_state.status === RManagerStatus.CONFIGURING_R && !local_state.was_configuration_executed) {
+            const r_executable_file_path = getRPackageFilePath();
+            const does_file_exist = fs.existsSync(r_executable_file_path);
+            if (does_file_exist) {
+                setLocalState({ ...local_state, was_configuration_executed: true });
+
+                rManagerDispatch({
+                    payload: { status: RManagerStatus.CONFIGURING_R },
+                    type: RManagerReducerActionType.SET_STATUS
+                });
+                const command = `${r_executable_file_path} --help`;
+                child_process.exec(command, function(error: any, standard_out: any, standard_error: any) {
+                    // console.log(
+                    //     '---------------------------------\nCommand was run!\n---------------------------------'
+                    // );
+                    // console.log(error);
+                    // console.log(standard_out);
+                    // console.log(standard_error);
+                    rManagerDispatch({
+                        payload: {
+                            command: command,
+                            error: error,
+                            standard_output: standard_out,
+                            error_output: standard_error
+                        },
+                        type: RManagerReducerActionType.SET_EXECUTION_COMMAND
+                    });
+                    rManagerDispatch({
+                        payload: {
+                            status: RManagerStatus.READY
+                        },
+                        type: RManagerReducerActionType.SET_STATUS
+                    });
+
+                    if (error === null) {
+                    } else {
+                        // An error happened!
+                        console.error('An unexpected error has occurred while trying to configure R!');
+                        console.error(error);
+                        console.error(standard_out);
+                        console.error(standard_error);
+                    }
+                });
+            } else {
+                console.error('The R binary required was not found!');
+                console.error('Path: ' + r_executable_file_path);
+                console.error('Please make sure this is bundled correcty!');
+            }
+        }
+    }, [local_state, r_manager_state.status]);
 
     // --------------------
     // Execution Requested
