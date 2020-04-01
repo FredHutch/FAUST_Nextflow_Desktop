@@ -7,7 +7,7 @@ export const getShinyPath = () => {
     return '/shiny';
 };
 
-// DELETE
-export const getErrorPagePath = () => 'deleteme';
-export const getProcessingPagePath = () => 'deleteme';
-export const getResultsPagePath = () => 'deleteme';
+// Old workflow - Consider removing?
+export const getErrorPagePath = () => '/error';
+export const getProcessingPagePath = () => '/processing';
+export const getResultsPagePath = () => '/results';
