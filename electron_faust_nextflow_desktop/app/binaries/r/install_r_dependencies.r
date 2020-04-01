@@ -5,25 +5,25 @@
 
 source("install_r_cran_dependencies.r")
 
-cran_packages_to_install <- c(
-    "BiocManager",
-    "callr",
-    "cowplot",
-    "dplyr",
-    "DT",
-    "foreach",
-    "gridExtra",
-    "ggplotify",
-    "heatmaply",
-    "plotly",
-    "rChoiceDialogs",
-    "shiny",
-    "shinyalert",
-    "shinycssloaders",
-    "shinyjs",
-    "shinyFiles",
-    "shinyWidgets",
-    "tidyr"
+cran_packages_to_install <- list(
+    list("BiocManager", "1.30.10"),
+    list("callr", "3.4.3")
+    list("cowplot", "1.0.0"),
+    list("dplyr", "0.8.5"),
+    list("DT", "0.13"),
+    list("foreach", "1.5.0"),
+    list("gridExtra", "2.3"),
+    list("ggplotify", "0.0.5"),
+    list("heatmaply", "1.1.0"),
+    list("plotly", "4.9.2"),
+    list("rChoiceDialogs", "1.0.6"),
+    list("shiny", "1.4.0.2"),
+    list("shinyalert", "1.0"),
+    list("shinycssloaders", "0.3"),
+    list("shinyjs", "1.1"),
+    list("shinyFiles", "0.7.5"),
+    list("shinyWidgets", "0.5.1"),
+    list("tidyr", "1.0.2")
 )
 
 bioc_packages_to_install <- c(
