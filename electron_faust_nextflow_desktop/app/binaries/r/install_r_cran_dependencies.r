@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-# Taken from here
+# Heavily edited from here:
 # https://github.com/dirkschumacher/r-shiny-electron/blob/master/add-cran-binary-pkgs.R
 
 # Script to find dependencies of a pkg list, download binaries and put them
@@ -8,19 +8,19 @@
 
 default_cran_repo_url = "https://cloud.r-project.org"
 
-default_directories_to_remove <- c("help",
-                                   "doc",
-                                   "tests",
-                                   "html",
-                                   "include",
-                                   "unitTests",
-                                   file.path("libs", "*dSYM"))
+default_package_directories_to_remove <- c("help",
+                                           "doc",
+                                           "tests",
+                                           "html",
+                                           "include",
+                                           "unitTests",
+                                           file.path("libs", "*dSYM"))
 
-install_cran_dependencies <- function(cran_packages,
+installCranDependencies <- function(cran_packages,
                                       library_path,
                                       type,
                                       decompress,
-                                      remove_dirs = default_directories_to_remove) {
+                                      remove_dirs = default_package_directories_to_remove) {
     if (!length(cran_packages)) {
         stop("No cran packages were specified to install")
     }

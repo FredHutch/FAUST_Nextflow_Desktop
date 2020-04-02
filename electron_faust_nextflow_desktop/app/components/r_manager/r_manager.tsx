@@ -106,7 +106,7 @@ export const RManager = (props: IProps) => {
                     //     '---------------------------------\nCommand was run!\n---------------------------------'
                     // );
                     // console.log(error);
-                    // console.log(standard_out);
+                    console.log(standard_out);
                     // console.log(standard_error);
                     rManagerDispatch({
                         payload: {
