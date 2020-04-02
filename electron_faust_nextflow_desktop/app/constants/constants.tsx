@@ -20,6 +20,13 @@ import { FAUSTSubmissionFormState } from '../components/faust_submission_form';
 // -----------------------------------------------------------------------------
 // N/A
 
+export interface IExecutionCommand {
+    command: string | null;
+    error: string | null;
+    standard_output: string | null;
+    error_output: string | null;
+}
+
 export enum FAUSTNextflowProfile {
     AWS = 'aws',
     LOCAL = 'local'
@@ -58,11 +65,8 @@ export interface INextflowAWSUserRunOptions extends INextflowUserRunOptions {
     aws_batch_job_queue_name: string;
     aws_s3_bucket_name: string;
 }
-export type NextflowUserRunOptions =
-    | INextflowLocalUserRunOptions
-    | INextflowAWSUserRunOptions;
-export const default_faust_nextflow_github_url =
-    'https://github.com/FredHutch/FAUST_Nextflow/';
+export type NextflowUserRunOptions = INextflowLocalUserRunOptions | INextflowAWSUserRunOptions;
+export const default_faust_nextflow_github_url = 'https://github.com/FredHutch/FAUST_Nextflow/';
 export const default_faust_nextflow_github_tag = 'development';
 export const default_faust_nextflow_profile = 'aws';
 
@@ -91,12 +95,10 @@ export const generateNextflowRunOptions = (
         // AWS Options
     };
     if (faust_submission_form_state.aws_batch_job_queue_name !== null) {
-        nextflow_run_options.aws_batch_job_queue_name =
-            faust_submission_form_state.aws_batch_job_queue_name;
+        nextflow_run_options.aws_batch_job_queue_name = faust_submission_form_state.aws_batch_job_queue_name;
     }
     if (faust_submission_form_state.aws_s3_bucket_name !== null) {
-        nextflow_run_options.aws_s3_bucket_name =
-            faust_submission_form_state.aws_s3_bucket_name;
+        nextflow_run_options.aws_s3_bucket_name = faust_submission_form_state.aws_s3_bucket_name;
     }
     // Optional
 
@@ -127,22 +129,13 @@ export const generateNextflowRunCommand = (
     // -------------------------------------------------------------------------
     // Required
     // -------------------------------------------------------------------------
-    if (
-        run_options.active_channels_file_path !== undefined &&
-        run_options.active_channels_file_path !== null
-    ) {
+    if (run_options.active_channels_file_path !== undefined && run_options.active_channels_file_path !== null) {
         run_command += `\\ --active_channels_path \"${run_options.active_channels_file_path}\"`;
     }
-    if (
-        run_options.channel_bounds_file_path !== undefined &&
-        run_options.channel_bounds_file_path !== null
-    ) {
+    if (run_options.channel_bounds_file_path !== undefined && run_options.channel_bounds_file_path !== null) {
         run_command += `\\ --channel_bounds_path \"${run_options.channel_bounds_file_path}\"`;
     }
-    if (
-        run_options.supervised_list_file_path !== undefined &&
-        run_options.supervised_list_file_path !== null
-    ) {
+    if (run_options.supervised_list_file_path !== undefined && run_options.supervised_list_file_path !== null) {
         run_command += `\\ --supervised_list_path \"${run_options.supervised_list_file_path}\"`;
     }
 
@@ -157,16 +150,10 @@ export const generateNextflowRunCommand = (
     // console.log(run_options);
     const aws_run_options = run_options as INextflowAWSUserRunOptions;
     // console.log(aws_run_options);
-    if (
-        aws_run_options.aws_s3_bucket_name !== undefined &&
-        aws_run_options.aws_s3_bucket_name !== null
-    ) {
+    if (aws_run_options.aws_s3_bucket_name !== undefined && aws_run_options.aws_s3_bucket_name !== null) {
         run_command += `\\ -bucket-dir s3://${aws_run_options.aws_s3_bucket_name}`;
     }
-    if (
-        aws_run_options.aws_batch_job_queue_name !== undefined &&
-        aws_run_options.aws_batch_job_queue_name !== null
-    ) {
+    if (aws_run_options.aws_batch_job_queue_name !== undefined && aws_run_options.aws_batch_job_queue_name !== null) {
         run_command += `\\ -process.queue ${aws_run_options.aws_batch_job_queue_name}`;
     }
 

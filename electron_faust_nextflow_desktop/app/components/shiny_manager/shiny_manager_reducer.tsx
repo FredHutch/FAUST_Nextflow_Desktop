@@ -14,7 +14,6 @@ import React from 'react';
 // Custom Components
 // -----------------------------------------------------------------------------
 import { IExecutionCommand } from '../../constants/constants';
-//
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
@@ -23,11 +22,11 @@ import { IExecutionCommand } from '../../constants/constants';
 // -----------------------------------------------------------------------------
 // Contracts
 // -----------------------------------------------------------------------------
-export enum RManagerStatus {
+export enum ShinyManagerStatus {
     NEW = 'NEW',
     // ---
-    REQUEST_R_CONFIGURATION = 'REQUEST_R_CONFIGURATION',
-    CONFIGURING_R = 'CONFIGURING_R',
+    REQUEST_SHINY_CONFIGURATION = 'REQUEST_SHINY_CONFIGURATION',
+    CONFIGURING_SHINY = 'CONFIGURING_SHINY',
     CONFIGURING = 'CONFIGURING',
     // ---
     READY = 'READY',
@@ -44,45 +43,56 @@ const default_exec_command = {
     standard_output: null,
     error_output: null
 };
-export interface IRManagerState {
+export interface IShinyManagerState {
+    was_download_triggered: boolean;
     execution_command: IExecutionCommand;
-    status: RManagerStatus;
+    status: ShinyManagerStatus;
 }
 
-export const default_r_manager_state: IRManagerState = {
+export const default_shiny_manager_state: IShinyManagerState = {
+    was_download_triggered: false,
     execution_command: default_exec_command,
-    status: RManagerStatus.NEW
+    status: ShinyManagerStatus.NEW
 };
 
-export const RManagerStateContext = React.createContext(default_r_manager_state);
-export const RManagerDispatchContext = React.createContext({});
+export const ShinyManagerStateContext = React.createContext(default_shiny_manager_state);
+export const ShinyManagerDispatchContext = React.createContext({});
 // -----------------------------------------------------------------------------
 // Reducer
 // -----------------------------------------------------------------------------
 // TODO
-export enum RManagerReducerActionType {
-    CONFIGURE_R = 'CONFIGURE_R_INSTALLATION',
+export enum ShinyManagerReducerActionType {
+    CONFIGURE_SHINY = 'CONFIGURE_SHINY_INSTALLATION',
+    LAUNCH_SHINY = 'LAUNCH_SHINY',
     SET_EXECUTION_COMMAND = 'SET_EXECUTION_COMMAND',
     SET_STATUS = 'SET_STATUS'
 }
-export interface IRManagerReducerAction {
+export interface IShinyManagerReducerAction {
     payload: any;
-    type: RManagerReducerActionType;
+    type: ShinyManagerReducerActionType;
 }
 
-export function RManagerReducer(current_state: IRManagerState, action: IRManagerReducerAction): IRManagerState {
+export function ShinyManagerReducer(
+    current_state: IShinyManagerState,
+    action: IShinyManagerReducerAction
+): IShinyManagerState {
     switch (action.type) {
-        case RManagerReducerActionType.CONFIGURE_R: {
+        case ShinyManagerReducerActionType.CONFIGURE_SHINY: {
             const new_state = { ...current_state };
-            new_state.status = RManagerStatus.REQUEST_R_CONFIGURATION;
+            new_state.status = ShinyManagerStatus.REQUEST_SHINY_CONFIGURATION;
             return new_state;
         }
-        case RManagerReducerActionType.SET_EXECUTION_COMMAND: {
+        case ShinyManagerReducerActionType.LAUNCH_SHINY: {
+            const new_state = { ...current_state };
+            new_state.status = ShinyManagerStatus.EXECUTION_REQUESTED;
+            return new_state;
+        }
+        case ShinyManagerReducerActionType.SET_EXECUTION_COMMAND: {
             const new_state = { ...current_state };
             new_state.execution_command = { ...action.payload };
             return new_state;
         }
-        case RManagerReducerActionType.SET_STATUS: {
+        case ShinyManagerReducerActionType.SET_STATUS: {
             const new_state = { ...current_state };
             new_state.status = action.payload.status;
             return new_state;
@@ -96,12 +106,17 @@ export function RManagerReducer(current_state: IRManagerState, action: IRManager
 // -----------------------------------------------------------------------------
 // Provider
 // -----------------------------------------------------------------------------
-export function RManagerProvider({ children }: any) {
-    const [r_manager_state, r_manager_dispatch] = React.useReducer(RManagerReducer, default_r_manager_state);
+export function ShinyManagerProvider({ children }: any) {
+    const [shiny_manager_state, shiny_manager_dispatch] = React.useReducer(
+        ShinyManagerReducer,
+        default_shiny_manager_state
+    );
 
     return (
-        <RManagerStateContext.Provider value={r_manager_state}>
-            <RManagerDispatchContext.Provider value={r_manager_dispatch}>{children}</RManagerDispatchContext.Provider>
-        </RManagerStateContext.Provider>
+        <ShinyManagerStateContext.Provider value={shiny_manager_state}>
+            <ShinyManagerDispatchContext.Provider value={shiny_manager_dispatch}>
+                {children}
+            </ShinyManagerDispatchContext.Provider>
+        </ShinyManagerStateContext.Provider>
     );
 }

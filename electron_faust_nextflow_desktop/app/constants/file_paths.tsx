@@ -70,3 +70,11 @@ export const getShinyAppDirectoryPath = () => {
     const shiny_app_directory_path = path.join(app_path, shiny_app_directory_name);
     return shiny_app_directory_path;
 };
+
+export const getStartShinyAppCommand = () => {
+    const r_file_path = getRPackageFilePath();
+    const shiny_app_directory_path = getShinyAppDirectoryPath();
+    const command_to_execute = `${r_file_path} ${shiny_app_directory_path}`;
+
+    return command_to_execute;
+};

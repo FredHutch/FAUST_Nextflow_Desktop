@@ -15,20 +15,26 @@ import { Col, Container, Row, Spinner, Table } from 'reactstrap';
 // -----------------------------------------------------------------------------
 // Custom Components
 // -----------------------------------------------------------------------------
-import { ComponentsStatusDisplay } from '../components/components_status_display';
-import { FAUSTExecutionTimeTable } from '../components/faust_execution_time_table';
+// import { ComponentsStatusDisplay } from '../components/components_status_display';
+// import { FAUSTExecutionTimeTable } from '../components/faust_execution_time_table';
+// import {
+//     FAUSTExecutorDispatchContext,
+//     FAUSTExecutorStateContext,
+//     FAUSTExecutorStatus,
+//     FAUSTExecutorReducerActionType,
+//     generateNextflowRunOptions
+// } from '../components/faust_executor';
+import { RManagerStateContext, RManagerStatus } from '../components/r_manager';
 import {
-    FAUSTExecutorDispatchContext,
-    FAUSTExecutorStateContext,
-    FAUSTExecutorStatus,
-    FAUSTExecutorReducerActionType,
-    generateNextflowRunOptions
-} from '../components/faust_executor';
-import { RManagerStateContext } from '../components/r_manager';
+    ShinyManagerDispatchContext,
+    ShinyManagerReducerActionType,
+    ShinyManagerStateContext,
+    ShinyManagerStatus
+} from '../components/shiny_manager';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
-import { getErrorPagePath, getResultsPagePath } from '../constants/app_paths';
+// import { getErrorPagePath, getResultsPagePath } from '../constants/app_paths';
 import faust_logo_large from '../../resources/faust_icon/6000x3600.png';
 
 interface IProps {}
@@ -53,6 +59,8 @@ export const StartUpPage = (props: IProps) => {
     // -----------
     const r_manager_state = React.useContext(RManagerStateContext);
     // ---
+    const shiny_manager_state = React.useContext(ShinyManagerStateContext);
+    const shinyManagerDispatch: any = React.useContext(ShinyManagerDispatchContext);
     // const faust_executor_state = React.useContext(FAUSTExecutorStateContext);
     // -----------
     // Helpers
@@ -67,27 +75,25 @@ export const StartUpPage = (props: IProps) => {
     // -------------------------------------------------------------------------
     // Life Cycle Events
     // -------------------------------------------------------------------------
-    // ------------------------------
-    // FAUST Execution Success
-    // ------------------------------
-    // React.useEffect(() => {
-    //     if (
-    //         faust_executor_state.status ===
-    //         FAUSTExecutorStatus.EXECUTION_SUCCEEDED
-    //     ) {
-    //         history.push(getResultsPagePath());
-    //     }
-    // }, [faust_executor_state.status]);
-    // ------------------------------
-    // FAUST Execution Failure
-    // ------------------------------
-    // React.useEffect(() => {
-    //     if (
-    //         faust_executor_state.status === FAUSTExecutorStatus.EXECUTION_FAILED
-    //     ) {
-    //         history.push(getErrorPagePath());
-    //     }
-    // }, [faust_executor_state.status]);
+    // --------------------
+    // Launch Shiny
+    // --------------------
+    React.useEffect(() => {
+        // if (
+        //     faust_executor_state.status === FAUSTExecutorStatus.EXECUTION_FAILED
+        // ) {
+        //     history.push(getErrorPagePath());
+        // }
+        if (
+            r_manager_state.status === RManagerStatus.READY &&
+            shiny_manager_state.status === ShinyManagerStatus.READY
+        ) {
+            shinyManagerDispatch({
+                payload: {},
+                type: ShinyManagerReducerActionType.LAUNCH_SHINY
+            });
+        }
+    }, [r_manager_state.status, shiny_manager_state.status]);
 
     // -------------------------------------------------------------------------
     // Render
@@ -117,16 +123,14 @@ export const StartUpPage = (props: IProps) => {
                         justifyContent: 'center'
                     }}
                 >
-                    <h1>Loading Required Dependencies - One Moment</h1>
+                    <center>
+                        <h1>Loading Required Dependencies - One Moment</h1>
+                    </center>
                     <br />R - {r_manager_state.status}
-                    <br />R Dependencies - {'Not Started'}
                     <br />
-                    Nextflow - {'Not Started'}
+                    Application Components - {shiny_manager_state.status}
                     <br />
-                    <Spinner
-                        color="info"
-                        style={{ height: '200px', width: '200px' }}
-                    />
+                    <Spinner color="info" style={{ height: '200px', width: '200px' }} />
                 </Col>
             </Row>
         </Container>

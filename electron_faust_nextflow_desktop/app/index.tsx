@@ -10,15 +10,10 @@ import { AppContainer as ReactHotAppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
 import { FAUSTSubmissionFormProvider } from './components/faust_submission_form';
-import {
-    NextflowManager,
-    NextflowManagerProvider
-} from './components/nextflow_manager';
-import {
-    FAUSTExecutor,
-    FAUSTExecutorProvider
-} from './components/faust_executor';
+import { NextflowManager, NextflowManagerProvider } from './components/nextflow_manager';
+import { FAUSTExecutor, FAUSTExecutorProvider } from './components/faust_executor';
 import { RManager, RManagerProvider } from './components/r_manager';
+import { ShinyManager, ShinyManagerProvider } from './components/shiny_manager';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
@@ -44,16 +39,19 @@ document.addEventListener('DOMContentLoaded', () =>
     render(
         <AppContainer>
             <RManagerProvider>
-                <NextflowManagerProvider>
-                    <FAUSTExecutorProvider>
-                        <FAUSTSubmissionFormProvider>
-                            <RManager />
-                            <NextflowManager />
-                            <FAUSTExecutor />
-                            <Root store={store} history={history} />
-                        </FAUSTSubmissionFormProvider>
-                    </FAUSTExecutorProvider>
-                </NextflowManagerProvider>
+                <ShinyManagerProvider>
+                    <NextflowManagerProvider>
+                        <FAUSTExecutorProvider>
+                            <FAUSTSubmissionFormProvider>
+                                <RManager />
+                                <ShinyManager />
+                                {/* <NextflowManager /> */}
+                                <FAUSTExecutor />
+                                <Root store={store} history={history} />
+                            </FAUSTSubmissionFormProvider>
+                        </FAUSTExecutorProvider>
+                    </NextflowManagerProvider>
+                </ShinyManagerProvider>
             </RManagerProvider>
         </AppContainer>,
         document.getElementById('root')
