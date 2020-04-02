@@ -29,7 +29,8 @@ export const getFAUSTWorkingDirectoryPath = () => {
 };
 
 const binaries_directory_name = 'binaries';
-const shiny_app_directory_name = 'shiny_app';
+const shiny_app_directory_name = 'shiny_apps';
+const shiny_start_script_name = 'start_shiny_app.r';
 
 // ------------------------------------------------------------------------------
 // Binaries
@@ -54,6 +55,12 @@ export const getRPackageFilePath = () => {
     return r_package_file_path;
 };
 
+export const getRScriptFilePath = () => {
+    const r_script_file_path = path.join(getBinariesDirectoryPath(), 'r', 'r-mac', 'Rscript');
+    // console.log('r_script_file_path: ' + r_script_file_path);
+    return r_script_file_path;
+};
+
 // ------------------------------------------------------------------------------
 // Shiny App
 // ------------------------------------------------------------------------------
@@ -71,10 +78,22 @@ export const getShinyAppDirectoryPath = () => {
     return shiny_app_directory_path;
 };
 
-export const getStartShinyAppCommand = () => {
-    const r_file_path = getRPackageFilePath();
+export const getShinyAppStartScriptFilePath = () => {
     const shiny_app_directory_path = getShinyAppDirectoryPath();
-    const command_to_execute = `${r_file_path} ${shiny_app_directory_path}`;
+    const shiny_app_start_script_file_path = path.join(shiny_app_directory_path, shiny_start_script_name);
+    return shiny_app_start_script_file_path;
+};
+
+export const getStartShinyAppCommand = () => {
+    const r_script_file_path = getRScriptFilePath();
+    const shiny_start_script_file_path = getShinyAppStartScriptFilePath();
+    // const shiny_app_directory_path = getShinyAppStartScriptFilePath();
+    // console.log(path.resolve(shiny_start_script_file_path));
+    const absolute_shiny_start_script_file_path = path.resolve(shiny_start_script_file_path);
+    const absolute_r_script_file_path = path.resolve(r_script_file_path);
+    // const command_to_execute = `${absolute_r_script_file_path} --help`;
+    const command_to_execute = `\"${absolute_r_script_file_path}\" --verbose \"${absolute_shiny_start_script_file_path}\"`;
+    // const command_to_execute = `${absolute_r_script_file_path} --slave --no-restore --file=\"${absolute_shiny_start_script_file_path}\"`;
 
     return command_to_execute;
 };

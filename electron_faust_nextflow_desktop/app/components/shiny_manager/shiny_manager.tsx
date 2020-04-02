@@ -122,70 +122,65 @@ export const ShinyManager = (props: IProps) => {
             shiny_manager_state.status === ShinyManagerStatus.EXECUTION_REQUESTED &&
             local_state.was_execution_triggered === false
         ) {
-            const r_executable_file_path = getRPackageFilePath();
-            const does_file_exist = fs.existsSync(r_executable_file_path);
-            if (does_file_exist) {
-                setLocalState({ ...local_state, was_execution_triggered: true });
+            // const r_executable_file_path = getRPackageFilePath();
+            // const does_file_exist = fs.existsSync(r_executable_file_path);
+            // if (does_file_exist) {
+            setLocalState({ ...local_state, was_execution_triggered: true });
 
-                shinyManagerDispatch({
-                    payload: { status: ShinyManagerStatus.EXECUTION_RUNNING },
-                    type: ShinyManagerReducerActionType.SET_STATUS
-                });
+            shinyManagerDispatch({
+                payload: { status: ShinyManagerStatus.EXECUTION_RUNNING },
+                type: ShinyManagerReducerActionType.SET_STATUS
+            });
 
-                const start_shiny_app_command = getStartShinyAppCommand();
-                const command = `${r_executable_file_path} --help`;
-                console.log('RUNNING SHINY');
-                console.log(start_shiny_app_command);
-                console.log('commands: ' + command);
-                child_process.exec(command, function(error: any, standard_out: any, standard_error: any) {
-                    // console.log(
-                    //     '---------------------------------\nCommand was run!\n---------------------------------'
-                    // );
-                    // console.log(error);
-                    // console.log(standard_out);
-                    // console.log(standard_error);
-                    shinyManagerDispatch({
-                        payload: {
-                            command: command,
-                            error: error,
-                            standard_output: standard_out,
-                            error_output: standard_error
-                        },
-                        type: ShinyManagerReducerActionType.SET_EXECUTION_COMMAND
-                    });
-
-                    if (error === null) {
-                        shinyManagerDispatch({
-                            payload: {
-                                status: ShinyManagerStatus.EXECUTION_SUCCEEDED
-                            },
-                            type: ShinyManagerReducerActionType.SET_STATUS
-                        });
-                    } else {
-                        // An error happened!
-                        console.error('An unexpected error has occurred while trying to configure R!');
-                        console.error(error);
-                        console.error(standard_out);
-                        console.error(standard_error);
-                        shinyManagerDispatch({
-                            payload: {
-                                status: ShinyManagerStatus.EXECUTION_FAILED
-                            },
-                            type: ShinyManagerReducerActionType.SET_STATUS
-                        });
-                    }
-                });
-            } else {
-                console.error('The R binary required was not found!');
-                console.error('Path: ' + r_executable_file_path);
-                console.error('Please make sure this is bundled correcty!');
+            const start_shiny_app_command = getStartShinyAppCommand();
+            // const command = `${r_executable_file_path} --help`;
+            console.log('RUNNING SHINY');
+            console.log('command:' + start_shiny_app_command);
+            // console.log('commands: ' + command);
+            child_process.exec(start_shiny_app_command, function(error: any, standard_out: any, standard_error: any) {
+                console.log('---------------------------------\nCommand was run!\n---------------------------------');
+                console.log(error);
+                console.log(standard_out);
+                console.log(standard_error);
                 shinyManagerDispatch({
                     payload: {
-                        status: ShinyManagerStatus.EXECUTION_FAILED
+                        command: start_shiny_app_command,
+                        error: error,
+                        standard_output: standard_out,
+                        error_output: standard_error
                     },
-                    type: ShinyManagerReducerActionType.SET_STATUS
+                    type: ShinyManagerReducerActionType.SET_EXECUTION_COMMAND
                 });
-            }
+
+                if (error === null) {
+                    shinyManagerDispatch({
+                        payload: {
+                            status: ShinyManagerStatus.EXECUTION_SUCCEEDED
+                        },
+                        type: ShinyManagerReducerActionType.SET_STATUS
+                    });
+                } else {
+                    // An error happened!
+                    console.error('An unexpected error has occurred while trying to run Shiny!');
+                    shinyManagerDispatch({
+                        payload: {
+                            status: ShinyManagerStatus.EXECUTION_FAILED
+                        },
+                        type: ShinyManagerReducerActionType.SET_STATUS
+                    });
+                }
+            });
+            // } else {
+            //     console.error('The R binary required was not found!');
+            //     console.error('Path: ' + r_executable_file_path);
+            //     console.error('Please make sure this is bundled correcty!');
+            //     shinyManagerDispatch({
+            //         payload: {
+            //             status: ShinyManagerStatus.EXECUTION_FAILED
+            //         },
+            //         type: ShinyManagerReducerActionType.SET_STATUS
+            //     });
+            // }
         }
     }, [r_manager_state.status, local_state, shiny_manager_state.status]);
 
