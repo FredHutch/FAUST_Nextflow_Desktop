@@ -128,3 +128,4 @@ nextflow
 electron_faust_nextflow_desktop/app/binaries/r/r-mac
 # TODO: Remove if shiny app manages this
 electron_faust_nextflow_desktop/app/faust_working_directory
+electron_faust_nextflow_desktop/app/shiny_apps
