@@ -85,14 +85,16 @@ export const getShinyAppStartScriptFilePath = () => {
 };
 
 export const getStartShinyAppCommand = () => {
+    const r_file_path = getRPackageFilePath();
     const r_script_file_path = getRScriptFilePath();
     const shiny_start_script_file_path = getShinyAppStartScriptFilePath();
     // const shiny_app_directory_path = getShinyAppStartScriptFilePath();
     // console.log(path.resolve(shiny_start_script_file_path));
     const absolute_shiny_start_script_file_path = path.resolve(shiny_start_script_file_path);
+    const absolute_r_file_path = path.resolve(r_file_path);
     const absolute_r_script_file_path = path.resolve(r_script_file_path);
-    // const command_to_execute = `${absolute_r_script_file_path} --help`;
-    const command_to_execute = `\"${absolute_r_script_file_path}\" --verbose \"${absolute_shiny_start_script_file_path}\"`;
+    const command_to_execute = `${absolute_r_script_file_path} --help`;
+    // const command_to_execute = `\"${absolute_r_file_path}\" CMD BATCH \"${absolute_shiny_start_script_file_path}\"`;
     // const command_to_execute = `${absolute_r_script_file_path} --slave --no-restore --file=\"${absolute_shiny_start_script_file_path}\"`;
 
     return command_to_execute;
