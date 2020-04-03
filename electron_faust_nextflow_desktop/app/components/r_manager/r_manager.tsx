@@ -24,7 +24,7 @@ import {
     RManagerStateContext,
     RManagerStatus
 } from './r_manager_reducer';
-import { getRPackageFilePath } from '../../constants/file_paths';
+import { getRFilePath } from '../../constants/file_paths';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
@@ -90,7 +90,7 @@ export const RManager = (props: IProps) => {
 
     React.useEffect(() => {
         if (r_manager_state.status === RManagerStatus.CONFIGURING_R && !local_state.was_configuration_executed) {
-            const r_executable_file_path = getRPackageFilePath();
+            const r_executable_file_path = getRFilePath();
             const does_file_exist = fs.existsSync(r_executable_file_path);
             if (does_file_exist) {
                 setLocalState({ ...local_state, was_configuration_executed: true });

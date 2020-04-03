@@ -3,6 +3,7 @@
 // -----------------------------------------------------------------------------
 const child_process = require('child_process');
 const fs = require('fs');
+const path = require('path');
 // -----------------------------------------------------------------------------
 // Electron
 // -----------------------------------------------------------------------------
@@ -25,12 +26,18 @@ import {
     ShinyManagerStatus
 } from './shiny_manager_reducer';
 import {
-    RManagerDispatchContext,
+    // RManagerDispatchContext,
     // RManagerReducerActionType,
     RManagerStateContext,
     RManagerStatus
 } from '../r_manager';
-import { getRPackageFilePath, getStartShinyAppCommand } from '../../constants/file_paths';
+import {
+    getRTopLevelDirectoryPath,
+    getRDirectoryPath,
+    getStartShinyAppCommand,
+    getShinyAppStartScriptFilePath,
+    shiny_start_script_name
+} from '../../constants/file_paths';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
@@ -122,7 +129,7 @@ export const ShinyManager = (props: IProps) => {
             shiny_manager_state.status === ShinyManagerStatus.EXECUTION_REQUESTED &&
             local_state.was_execution_triggered === false
         ) {
-            // const r_executable_file_path = getRPackageFilePath();
+            // const r_executable_file_path = getRFilePath();
             // const does_file_exist = fs.existsSync(r_executable_file_path);
             // if (does_file_exist) {
             setLocalState({ ...local_state, was_execution_triggered: true });
@@ -132,21 +139,40 @@ export const ShinyManager = (props: IProps) => {
                 type: ShinyManagerReducerActionType.SET_STATUS
             });
 
+            // BIG WARNING: The R executable REQUIRES this env to point to the
+            //              directory containing R. Otherwise it will NOT know
+            //              where to execute.
+            //              This only works for the `R` entry point
+            //              Rscript is broken :'(
+            process.env.R_HOME_DIR = getRDirectoryPath();
+            process.env.R_HOME = getRDirectoryPath();
+            console.log(process.env.R_HOME_DIR);
+
+            // R_HOME_DIR="/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/r/r-mac"
             const start_shiny_app_command = getStartShinyAppCommand();
             // const command = `${r_executable_file_path} --help`;
+            console.log('--------------');
             console.log('RUNNING SHINY');
             console.log('command:' + start_shiny_app_command);
             // console.log('commands: ' + command);
             child_process.exec(start_shiny_app_command, function(error: any, standard_out: any, standard_error: any) {
+                // WARNING: R Has to be executed with `R CMD BATCH` which outputs
+                //          all information to a file matching the script's path/name
+                //          AND appends a .Rout suffix to it.
+                //          This is placed in the `R_HOME_DIR`
+                //          So in order to know what happened we have to read it
+                const output_file_name = shiny_start_script_name + '.Rout';
+                const output_file_path = path.join(getRTopLevelDirectoryPath(), output_file_name);
+                const output_file_contents = fs.readFileSync(output_file_path, 'utf8');
                 console.log('---------------------------------\nCommand was run!\n---------------------------------');
                 console.log(error);
-                console.log(standard_out);
+                console.log(output_file_contents);
                 console.log(standard_error);
                 shinyManagerDispatch({
                     payload: {
                         command: start_shiny_app_command,
                         error: error,
-                        standard_output: standard_out,
+                        standard_output: output_file_contents,
                         error_output: standard_error
                     },
                     type: ShinyManagerReducerActionType.SET_EXECUTION_COMMAND
