@@ -95,15 +95,20 @@ export const getShinyAppStartScriptFilePath = () => {
     const shiny_app_start_script_file_path = path.join(shiny_app_directory_path, shiny_start_script_name);
     return path.resolve(shiny_app_start_script_file_path);
 };
+export const getShinyAppStartScriptOutputFilePath = () => {
+    const shiny_start_script_output_file_path = getShinyAppStartScriptFilePath() + 'R.out';
+    return path.resolve(shiny_start_script_output_file_path);
+};
 
 export const getStartShinyAppCommand = () => {
     const r_file_path = getRFilePath();
-    const r_script_file_path = getRScriptFilePath();
-    const shiny_start_script_file_path = getShinyAppStartScriptFilePath();
+    // const r_script_file_path = getRScriptFilePath();
+    const shiny_start_script_input_file_path = getShinyAppStartScriptFilePath();
+    const shiny_start_script_output_file_path = getShinyAppStartScriptOutputFilePath();
 
     // const command_to_execute = `${r_script_file_path} --help`;
-    const command_to_execute = `${r_file_path} CMD BATCH ${shiny_start_script_file_path}`;
-    // const command_to_execute = `${r_script_file_path} ${shiny_start_script_file_path}`;
+    const command_to_execute = `${r_file_path} CMD BATCH --verbose ${shiny_start_script_input_file_path} ${shiny_start_script_output_file_path}`;
+    // const command_to_execute = `${r_script_file_path} ${shiny_start_script_input_file_path}`;
 
     return command_to_execute;
 };

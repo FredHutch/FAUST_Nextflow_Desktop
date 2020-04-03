@@ -36,6 +36,7 @@ import {
     getRDirectoryPath,
     getStartShinyAppCommand,
     getShinyAppStartScriptFilePath,
+    getShinyAppStartScriptOutputFilePath,
     shiny_start_script_name
 } from '../../constants/file_paths';
 // -----------------------------------------------------------------------------
@@ -146,7 +147,7 @@ export const ShinyManager = (props: IProps) => {
             //              Rscript is broken :'(
             process.env.R_HOME_DIR = getRDirectoryPath();
             process.env.R_HOME = getRDirectoryPath();
-            console.log(process.env.R_HOME_DIR);
+            // console.log(process.env.R_HOME_DIR);
 
             // R_HOME_DIR="/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/r/r-mac"
             const start_shiny_app_command = getStartShinyAppCommand();
@@ -161,10 +162,11 @@ export const ShinyManager = (props: IProps) => {
                 //          AND appends a .Rout suffix to it.
                 //          This is placed in the `R_HOME_DIR`
                 //          So in order to know what happened we have to read it
-                const output_file_name = shiny_start_script_name + '.Rout';
-                const output_file_path = path.join(getRTopLevelDirectoryPath(), output_file_name);
+                // const output_file_name = shiny_start_script_name + '.Rout';
+                const output_file_path = getShinyAppStartScriptOutputFilePath();
                 const output_file_contents = fs.readFileSync(output_file_path, 'utf8');
                 console.log('---------------------------------\nCommand was run!\n---------------------------------');
+                console.log(output_file_path);
                 console.log(error);
                 console.log(output_file_contents);
                 console.log(standard_error);
