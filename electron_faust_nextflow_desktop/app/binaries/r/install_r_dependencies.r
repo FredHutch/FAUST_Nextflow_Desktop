@@ -7,41 +7,77 @@ source("install_r_biocmanager_dependencies.r")
 source("install_r_cran_dependencies.r")
 
 cran_packages_to_install <- list(
+    # For FAUST_Tools
+    list("assertthat", NA),
     list("BiocManager", NA),
+    list("bitops", NA),
     list("callr", NA),
+    list("caTools", NA),
     list("cowplot", NA),
-    list("dplyr", NA),
+    list("crayon", NA),
+    list("dendextend", NA),
     list("digest", NA),
+    list("dplyr", NA),
     list("DT", NA),
     list("fastmap", NA),
     list("foreach", NA),
-    list("gridExtra", NA),
+    list("fs", NA),
+    list("gclus", NA),
+    list("gdata", NA),
+    list("ggplot2", NA),
     list("ggplotify", NA),
+    list("gplots", NA),
+    list("gridExtra", NA),
+    list("gtable", NA),
+    list("gtools", NA),
     list("heatmaply", NA),
     list("htmltools", NA),
+    list("htmlwidgets", NA),
     list("httpuv", NA),
+    list("httr", NA),
+    list("iterators", NA),
+    list("jsonlite", NA),
     list("later", NA),
+    list("lazyeval", NA),
     list("magrittr", NA),
     list("mime", NA),
+    list("pillar", NA),
+    list("pkgconfig", NA),
     list("plotly", NA),
     list("promises", NA),
+    list("purrr", NA),
     list("R6", NA),
     list("rChoiceDialogs", NA),
     list("Rcpp", NA),
+    list("registry", NA),
+    list("rJava", NA),
     list("rlang", NA),
+    list("seriation", NA),
     list("shiny", NA),
     list("shinyalert", NA),
     list("shinycssloaders", NA),
     list("shinyjs", NA),
     list("shinyFiles", NA),
     list("shinyWidgets", NA),
+    list("tibble", NA),
     list("tidyr", NA),
+    list("tidyselect", NA),
+    list("TSP", NA),
+    list("vctrs", NA),
+    list("viridis", NA),
+    list("webshot", NA),
+    list("withr", NA),
     list("xtable", NA)
+    # # For FAUST_Desktop_Application's electron execution
+    # list("backports", NA),
+    # list("here", NA),
+    # list("rprojroot", NA)
+
 )
 
 bioc_packages_to_install <- list(
-    list("flowCore", "3.10"),
-    list("flowWorkspace", "3.10")
+    list("flowCore", NA),
+    list("flowWorkspace", NA)
 )
 # github_packages_to_install <- c(
 #     # TODO

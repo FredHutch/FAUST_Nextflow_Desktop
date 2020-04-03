@@ -19,6 +19,8 @@ installBiocmanagerDependencies <- function(packages,
                                            type,
                                            decompress,
                                            remove_dirs = default_package_directories_to_remove) {
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print("BiocManager!")
     if (!length(packages)) {
         stop("No cran packages were specified to install")
     }
@@ -31,6 +33,10 @@ installBiocmanagerDependencies <- function(packages,
                                                  previously_installed_libraries)
     selected_cran_packages_to_install <- packages[!(requested_packages_to_install %in% previously_installed_libraries)]
 
+    print(paste0("previously_installed_libraries: ", previously_installed_libraries))
+    print(paste0("requested_packages_to_install: ", requested_packages_to_install))
+    print(paste0("detected_cran_packages_to_install: ", detected_cran_packages_to_install))
+    print(paste0("selected_cran_packages_to_install: ", selected_cran_packages_to_install))
     if (length(selected_cran_packages_to_install) == 0) {
         print("All BiocManager packages have been already been installed")
         return(NA)
@@ -50,11 +56,19 @@ installBiocmanagerDependencies <- function(packages,
                                       # print(package_version)
                                       # See this thread for install.packages` support
                                       # https://support.bioconductor.org/p/112726/
-                                      new_downloaded_package <- BiocManager::install(as.character(package_name), # No idea why I have to convert this to a string >:(
-                                                                                     destdir = temporary_download_directory_path,
-                                                                                     # repo = default_cran_repo_url,
-                                                                                     type = type,
-                                                                                     version = package_version)
+                                      if(is.na(package_version)) {
+                                          new_downloaded_package <- BiocManager::install(as.character(package_name), # No idea why I have to convert this to a string >:(
+                                                                                         destdir = temporary_download_directory_path,
+                                                                                         # repo = default_cran_repo_url,
+                                                                                         type = type)
+                                      }
+                                      else {
+                                          new_downloaded_package <- BiocManager::install(as.character(package_name), # No idea why I have to convert this to a string >:(
+                                                                                         destdir = temporary_download_directory_path,
+                                                                                         # repo = default_cran_repo_url,
+                                                                                         type = type,
+                                                                                         version = package_version)
+                                      }
                                   })
     # print(temporary_download_directory_path)
     # # print(list.dirs(temporary_download_directory_path))
@@ -77,13 +91,13 @@ installBiocmanagerDependencies <- function(packages,
     # print(all_package_artifact_paths)
     lapply(all_package_artifact_paths,
            function(compressed_package_file_path) {
-                # print("----------")
-                # print("Element Info")
-                # class(compressed_package_file_path)
-                # print(file.exists(compressed_package_file_path))
-                # print(paste0("Extracting: ", compressed_package_file_path))
-                # print(compressed_package_file_path)
-                # print(compressed_package_file_path[1])
+                print("----------")
+                print("compressed_package_file_path")
+                class(compressed_package_file_path)
+                print(file.exists(compressed_package_file_path))
+                print(paste0("Extracting: ", compressed_package_file_path))
+                print(compressed_package_file_path)
+                print(compressed_package_file_path[1])
                 decompress(compressed_package_file_path, exdir = library_path)
                 unlink(compressed_package_file_path)
             })

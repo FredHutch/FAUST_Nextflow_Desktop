@@ -16,6 +16,7 @@ export R_HOME_DIR="$CURRENT_DIRECTORY/r-mac"
 
 R_FILE_PATH="$R_HOME_DIR/R"
 R_DEPENDENCIES_INSTALL_FILE_PATH="$CURRENT_DIRECTORY/install_r_dependencies.r"
+R_DEPENDENCIES_INSTALL_OUTPUT_FILE_PATH="$R_DEPENDENCIES_INSTALL_FILE_PATH.Rout"
 
 echo "========================================================================="
 echo "Triggering bootstrapped dependency installation!"
@@ -24,5 +25,11 @@ echo "CURRENT_DIRECTORY: " + $CURRENT_DIRECTORY
 echo "R_HOME_DIR: " + $R_HOME_DIR
 echo "R_FILE_PATH: " + $R_FILE_PATH
 echo "R_DEPENDENCIES_INSTALL_FILE_PATH: " + $R_DEPENDENCIES_INSTALL_FILE_PATH
-# exec "$R_FILE_PATH CMD BATCH $R_DEPENDENCIES_INSTALL_FILE_PATH"
-exec $R_FILE_PATH CMD BATCH --verbose $R_DEPENDENCIES_INSTALL_FILE_PATH
+echo "R_DEPENDENCIES_INSTALL_OUTPUT_FILE_PATH: " + $R_DEPENDENCIES_INSTALL_OUTPUT_FILE_PATH
+
+
+
+# TODO: Figure out how to automatically cat out the output file
+exec $R_FILE_PATH CMD BATCH --verbose \
+        $R_DEPENDENCIES_INSTALL_FILE_PATH \
+        $R_DEPENDENCIES_INSTALL_OUTPUT_FILE_PATH
