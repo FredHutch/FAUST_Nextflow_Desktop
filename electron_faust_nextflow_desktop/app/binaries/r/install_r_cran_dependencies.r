@@ -43,11 +43,19 @@ installCranDependencies <- function(cran_packages,
                                   FUN = function(element) {
                                       package_name <- element[1]
                                       package_version <- element[2]
-                                      new_downloaded_package <- download.packages(package_name,
-                                                                                  destdir = temporary_download_directory,
-                                                                                  repo = default_cran_repo_url,
-                                                                                  type = type,
-                                                                                  version = package_version)
+                                      if(is.na(package_version)) {
+                                          new_downloaded_package <- download.packages(package_name,
+                                                                                      destdir = temporary_download_directory,
+                                                                                      repo = default_cran_repo_url,
+                                                                                      type = type)
+                                      }
+                                      else {
+                                          new_downloaded_package <- download.packages(package_name,
+                                                                                      destdir = temporary_download_directory,
+                                                                                      repo = default_cran_repo_url,
+                                                                                      type = type,
+                                                                                      version = package_version)
+                                      }
                                   })
     lapply(downloaded_packages,
            FUN = function(element) {
