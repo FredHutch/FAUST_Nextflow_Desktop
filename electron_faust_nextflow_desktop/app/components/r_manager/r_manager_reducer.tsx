@@ -71,6 +71,10 @@ export interface IRManagerReducerAction {
 }
 
 export function RManagerReducer(current_state: IRManagerState, action: IRManagerReducerAction): IRManagerState {
+    console.log('============================================================');
+    console.log('RManagerReducer');
+    console.log(current_state);
+    console.log(action);
     switch (action.type) {
         case RManagerReducerActionType.CONFIGURE_R: {
             const new_state = { ...current_state };

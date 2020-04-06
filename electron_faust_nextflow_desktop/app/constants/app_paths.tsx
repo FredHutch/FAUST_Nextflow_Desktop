@@ -2,7 +2,7 @@ export const getStartUpPagePath = () => {
     return '/';
 };
 
-export const getShinyPath = () => {
+export const getShinyPagePath = () => {
     // TODO: Return shiny url
     return '/shiny';
 };

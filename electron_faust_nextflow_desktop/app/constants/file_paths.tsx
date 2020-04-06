@@ -19,6 +19,12 @@ const app = require('electron').remote.app;
 // -----------------------------------------------------------------------------
 // N/A
 
+export enum OSType {
+    LINUX = 'LINUX',
+    OSX = 'OSX',
+    WINDOWS = 'WINDOWS'
+}
+
 // ------------------------------------------------------------------------------
 // FAUST Working Directory
 // ------------------------------------------------------------------------------
@@ -31,6 +37,27 @@ export const getFAUSTWorkingDirectoryPath = () => {
 export const binaries_directory_name = 'binaries';
 export const shiny_app_directory_name = 'shiny_apps';
 export const shiny_start_script_name = 'start_shiny_app.r';
+
+// ------------------------------------------------------------------------------
+// OS Specific
+// ------------------------------------------------------------------------------
+export const getOSType = () => {
+    return OSType.OSX;
+};
+
+export const randomInt = (min: number, max: number) => {
+    return Math.round(Math.random() * (max + 1 - min) + min);
+};
+export const getRandomPort = (): number => {
+    // Those forbidden ports are in line with shiny
+    // https://github.com/rstudio/shiny/blob/288039162086e183a89523ac0aacab824ef7f016/R/server.R#L734
+    const forbiddenPorts = [3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669, 6697];
+    while (true) {
+        let port = randomInt(3000, 8000);
+        if (forbiddenPorts.includes(port)) continue;
+        return port;
+    }
+};
 
 // ------------------------------------------------------------------------------
 // Binaries
@@ -119,4 +146,40 @@ export const getStartShinyAppCommand = () => {
     // const command_to_execute = `${r_script_file_path} ${shiny_start_script_input_file_path}`;
 
     return command_to_execute;
+};
+
+// Needed for the start script to know what to target
+export const getShinyAppFilePath = (): string => {
+    const shiny_app_directory_path = getShinyAppDirectoryPath();
+    const shiny_app_file_path = path.join(shiny_app_directory_path, 'faust_tools', 'inst', 'FAUSTApp', 'app.R');
+    return path.resolve(shiny_app_file_path);
+};
+
+export const getShinyAppHost = (): string => {
+    return '127.0.0.1';
+};
+
+export const getShinyAppPort = (): number => {};
+
+// ------------------------------------------------------------------------------
+// Java
+// ------------------------------------------------------------------------------
+export const getBinariesJavaDirectoryPath = () => {
+    const binaries_java_directory_path = path.join(getBinariesDirectoryPath(), 'java');
+    return path.resolve(binaries_java_directory_path);
+};
+
+export const getJavaHomeDirectoryPath = () => {
+    const current_os_type = getOSType();
+    switch (current_os_type) {
+        case OSType.LINUX:
+            console.error('LINUX NOT IMPLEMENTED YET');
+            break;
+        case OSType.OSX:
+            const osx_home_path = path.join(getBinariesJavaDirectoryPath(), 'osx', 'jdk-14.jdk', 'Contents', 'Home');
+            return path.resolve(osx_home_path);
+        case OSType.WINDOWS:
+            console.error('WINDOWS NOT IMPLEMENTED YET');
+            break;
+    }
 };

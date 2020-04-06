@@ -17,7 +17,7 @@ import { IExecutionCommand } from '../../constants/constants';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
-// N/A
+import { getRandomPort, getShinyAppHost } from '../../constants/file_paths';
 
 // -----------------------------------------------------------------------------
 // Contracts
@@ -45,6 +45,8 @@ const default_exec_command = {
 };
 export interface IShinyManagerState {
     was_download_triggered: boolean;
+    shiny_host: string;
+    shiny_port: number;
     execution_command: IExecutionCommand;
     status: ShinyManagerStatus;
 }
@@ -52,6 +54,8 @@ export interface IShinyManagerState {
 export const default_shiny_manager_state: IShinyManagerState = {
     was_download_triggered: false,
     execution_command: default_exec_command,
+    shiny_host: getShinyAppHost(),
+    shiny_port: getRandomPort(),
     status: ShinyManagerStatus.NEW
 };
 

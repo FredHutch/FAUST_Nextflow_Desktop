@@ -16,6 +16,7 @@ const path = require('path');
 // Third-Party Libraries
 // -----------------------------------------------------------------------------
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 // -----------------------------------------------------------------------------
 // Custom Components
 // -----------------------------------------------------------------------------
@@ -31,11 +32,16 @@ import {
     RManagerStateContext,
     RManagerStatus
 } from '../r_manager';
+import { getShinyPagePath } from '../../constants/app_paths';
 import {
+    getJavaHomeDirectoryPath,
     getRTopLevelDirectoryPath,
     getRDirectoryPath,
     getStartShinyAppCommand,
+    getShinyAppFilePath,
+    getShinyAppPort,
     getShinyAppStartScriptFilePath,
+    getShinyAppURL,
     getShinyAppStartScriptOutputFilePath,
     shiny_start_script_name
 } from '../../constants/file_paths';
@@ -63,7 +69,7 @@ export const ShinyManager = (props: IProps) => {
     // -----------
     // Hooks
     // -----------
-    // N/A
+    const history: any = useHistory();
     // -----------
     // Context
     // -----------
@@ -145,13 +151,23 @@ export const ShinyManager = (props: IProps) => {
             //              where to execute.
             //              This only works for the `R` entry point
             //              Rscript is broken :'(
+            // The same goes for Java
+            // The same goes for the Shiny App out of convenience
             process.env.R_HOME_DIR = getRDirectoryPath();
             process.env.R_HOME = getRDirectoryPath();
-            process.env.JAVA_HOME =
-                '/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/java/osx/jdk-14.jdk/Contents/Home';
-            // console.log(process.env.R_HOME_DIR);
+            process.env.JAVA_HOME = getJavaHomeDirectoryPath();
+            // ---
+            process.env.FAUST_TOOLS_SHINY_FILE_PATH = getShinyAppFilePath();
+            process.env.FAUST_TOOLS_SHINY_URL = shiny_manager_state.shiny_host;
+            process.env.FAUST_TOOLS_SHINY_PORT = `${shiny_manager_state.shiny_port}`;
+            // ---
+            console.log(process.env.R_HOME_DIR);
+            console.log(process.env.R_HOME);
+            console.log(process.env.JAVA_HOME);
+            console.log(process.env.FAUST_TOOLS_SHINY_FILE_PATH);
+            console.log(process.env.FAUST_TOOLS_SHINY_URL);
+            console.log(process.env.FAUST_TOOLS_SHINY_PORT);
 
-            // R_HOME_DIR="/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/r/r-mac"
             const start_shiny_app_command = getStartShinyAppCommand();
             // const command = `${r_executable_file_path} --help`;
             console.log('--------------');
@@ -164,7 +180,6 @@ export const ShinyManager = (props: IProps) => {
                 //          AND appends a .Rout suffix to it.
                 //          This is placed in the `R_HOME_DIR`
                 //          So in order to know what happened we have to read it
-                // const output_file_name = shiny_start_script_name + '.Rout';
                 const output_file_path = getShinyAppStartScriptOutputFilePath();
                 const output_file_contents = fs.readFileSync(output_file_path, 'utf8');
                 console.log('---------------------------------\nCommand was run!\n---------------------------------');
@@ -200,17 +215,16 @@ export const ShinyManager = (props: IProps) => {
                     });
                 }
             });
-            // } else {
-            //     console.error('The R binary required was not found!');
-            //     console.error('Path: ' + r_executable_file_path);
-            //     console.error('Please make sure this is bundled correcty!');
-            //     shinyManagerDispatch({
-            //         payload: {
-            //             status: ShinyManagerStatus.EXECUTION_FAILED
-            //         },
-            //         type: ShinyManagerReducerActionType.SET_STATUS
-            //     });
-            // }
+
+            const deployed_shiny_url = `http://${shiny_manager_state.shiny_host}:${shiny_manager_state.shiny_port}`;
+            console.log(deployed_shiny_url);
+            setTimeout(() => {
+                // window.location.href = deployed_shiny_url;
+                // window.location.replace(deployed_shiny_url);
+                // history.push(deployed_shiny_url);
+                history.push(getShinyPagePath());
+            }, 2000);
+            // console.log('Redirecting to Shiny!');
         }
     }, [r_manager_state.status, local_state, shiny_manager_state.status]);
 

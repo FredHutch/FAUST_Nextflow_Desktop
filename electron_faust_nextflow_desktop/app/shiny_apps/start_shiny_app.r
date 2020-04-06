@@ -1,13 +1,18 @@
+print("Beginning FAUST Shiny App Deployment")
+
 library("shiny")
-print("THIS IS WHERE I WOULD START SHINY")
 
+SHINY_APP_FILE_PATH <- Sys.getenv("FAUST_TOOLS_SHINY_FILE_PATH")
+SHINY_APP_URL <- Sys.getenv("FAUST_TOOLS_SHINY_URL")
+SHINY_APP_PORT <- as.integer(Sys.getenv("FAUST_TOOLS_SHINY_PORT"))
 
-# runApp("./faust_tools/inst/FAUSTApp/app.R")
-# print(normalizePath(getwd()))
-# "/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop"
-faust_shiny_app_file_path <- file.path(getwd(), "app", "shiny_apps", "faust_tools", "inst", "FAUSTApp", "app.R")
-# faust_shiny_app_file_path <- file.path(getwd(), "app", "shiny_apps", "debug_server", "app.R")
-print(faust_shiny_app_file_path)
-# SHINY_PORT
-runApp(faust_shiny_app_file_path, port = 10005)
+print(SHINY_APP_FILE_PATH)
+print(SHINY_APP_URL)
+print(SHINY_APP_PORT)
 
+runApp(
+    SHINY_APP_FILE_PATH,
+    host = SHINY_APP_URL,
+    port = SHINY_APP_PORT,
+    launch.browser = FALSE,
+)
