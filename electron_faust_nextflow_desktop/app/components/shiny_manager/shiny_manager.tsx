@@ -147,6 +147,8 @@ export const ShinyManager = (props: IProps) => {
             //              Rscript is broken :'(
             process.env.R_HOME_DIR = getRDirectoryPath();
             process.env.R_HOME = getRDirectoryPath();
+            process.env.JAVA_HOME =
+                '/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/java/osx/jdk-14.jdk/Contents/Home';
             // console.log(process.env.R_HOME_DIR);
 
             // R_HOME_DIR="/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/r/r-mac"

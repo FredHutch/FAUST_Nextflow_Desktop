@@ -15,6 +15,7 @@ cran_packages_to_install <- list(
     list("caTools", NA),
     list("cowplot", NA),
     list("crayon", NA),
+    list("crosstalk", NA),
     list("dendextend", NA),
     list("digest", NA),
     list("dplyr", NA),
@@ -28,6 +29,7 @@ cran_packages_to_install <- list(
     list("ggplotify", NA),
     list("gplots", NA),
     list("gridExtra", NA),
+    list("gridGraphics", NA),
     list("gtable", NA),
     list("gtools", NA),
     list("heatmaply", NA),
@@ -44,7 +46,9 @@ cran_packages_to_install <- list(
     list("pillar", NA),
     list("pkgconfig", NA),
     list("plotly", NA),
+    list("processx", NA),
     list("promises", NA),
+    list("ps", NA),
     list("purrr", NA),
     list("R6", NA),
     list("rChoiceDialogs", NA),
@@ -52,6 +56,7 @@ cran_packages_to_install <- list(
     list("registry", NA),
     list("rJava", NA),
     list("rlang", NA),
+    list("rvcheck", NA),
     list("seriation", NA),
     list("shiny", NA),
     list("shinyalert", NA),
@@ -67,7 +72,8 @@ cran_packages_to_install <- list(
     list("viridis", NA),
     list("webshot", NA),
     list("withr", NA),
-    list("xtable", NA)
+    list("xtable", NA),
+    list("yaml", NA)
     # # For FAUST_Desktop_Application's electron execution
     # list("backports", NA),
     # list("here", NA),
