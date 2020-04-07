@@ -70,6 +70,13 @@
                 "filter": [
                     "**/*"
                 ]
+            },
+            {
+                "from": "app/shiny_apps",
+                "to": "shiny_apps",
+                "filter": [
+                    "**/*"
+                ]
             }
         ],
         "dmg": {

@@ -113,7 +113,7 @@ export const StartUpPage = (props: IProps) => {
             console.log('REDIRECTING');
             setTimeout(() => {
                 history.push(getShinyPagePath());
-            }, 2000);
+            }, 5000);
             setLocalState({ ...local_state, was_redirect_triggered: true });
         }
     }, [r_manager_state.status, shiny_manager_state.status]);
