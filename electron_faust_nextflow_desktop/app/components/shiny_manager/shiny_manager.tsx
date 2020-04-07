@@ -224,7 +224,6 @@ export const ShinyManager = (props: IProps) => {
             // Shut Down Logic
             // -----------------------------------------------------------------
             // track this id using `main.dev.ts` to delete it
-            // Window Exitying - AKA Comand + Q/Ctrl + Q
             app.ipcRenderer.send('register-pid', child_process_object.pid);
             // ------
         }

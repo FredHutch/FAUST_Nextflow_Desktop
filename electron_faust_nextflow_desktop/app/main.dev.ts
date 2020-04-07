@@ -120,8 +120,6 @@ app.on('activate', () => {
 // https://stackoverflow.com/questions/36031465/electron-kill-child-process-exec
 // https://www.electronjs.org/docs/api/app
 // https://www.electronjs.org/docs/api/ipc-main
-// App close handler
-
 const process_ids: any = [];
 // TODO: Fix this to not error
 const killAllProcesses = (process_ids: any[]) => {
@@ -157,6 +155,7 @@ const killAllProcesses = (process_ids: any[]) => {
 ipcMain.on('quit-application', function(event: any, argument: any) {
     app.quit();
 });
+
 // --------------------
 // Window Exiting - AKA: Ctrl + Q/CMD + Q
 // --------------------

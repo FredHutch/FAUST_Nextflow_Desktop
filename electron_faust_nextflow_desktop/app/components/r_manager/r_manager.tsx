@@ -10,7 +10,7 @@ const fs = require('fs');
 // -----------------------------------------------------------------------------
 // Electron
 // -----------------------------------------------------------------------------
-// N/A
+const app = require('electron');
 // -----------------------------------------------------------------------------
 // Third-Party Libraries
 // -----------------------------------------------------------------------------
@@ -100,7 +100,11 @@ export const RManager = (props: IProps) => {
                     type: RManagerReducerActionType.SET_STATUS
                 });
                 const command = `${r_executable_file_path} --help`;
-                child_process.exec(command, function(error: any, standard_out: any, standard_error: any) {
+                const child_process_object = child_process.exec(command, function(
+                    error: any,
+                    standard_out: any,
+                    standard_error: any
+                ) {
                     // console.log(
                     //     '---------------------------------\nCommand was run!\n---------------------------------'
                     // );
@@ -132,6 +136,13 @@ export const RManager = (props: IProps) => {
                         console.error(standard_error);
                     }
                 });
+
+                // -----------------------------------------------------------------
+                // Shut Down Logic
+                // -----------------------------------------------------------------
+                // track this id using `main.dev.ts` to delete it
+                app.ipcRenderer.send('register-pid', child_process_object.pid);
+                // ------
             } else {
                 console.error('The R binary required was not found!');
                 console.error('Path: ' + r_executable_file_path);
