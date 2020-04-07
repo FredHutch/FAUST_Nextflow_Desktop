@@ -7,7 +7,7 @@ const path = require('path');
 // -----------------------------------------------------------------------------
 // Electron
 // -----------------------------------------------------------------------------
-// N/A
+const app = require('electron');
 // -----------------------------------------------------------------------------
 // Electron
 // -----------------------------------------------------------------------------
@@ -174,7 +174,11 @@ export const ShinyManager = (props: IProps) => {
             console.log('RUNNING SHINY');
             console.log('command:' + start_shiny_app_command);
             // console.log('commands: ' + command);
-            child_process.exec(start_shiny_app_command, function(error: any, standard_out: any, standard_error: any) {
+            const child_process_object = child_process.exec(start_shiny_app_command, function(
+                error: any,
+                standard_out: any,
+                standard_error: any
+            ) {
                 // WARNING: R Has to be executed with `R CMD BATCH` which outputs
                 //          all information to a file matching the script's path/name
                 //          AND appends a .Rout suffix to it.
@@ -215,6 +219,37 @@ export const ShinyManager = (props: IProps) => {
                     });
                 }
             });
+
+            // -----------------------------------------------------------------
+            // Shut Down Logic
+            // -----------------------------------------------------------------
+            // track this id using `main.dev.ts` to delete it
+            // Window Exitying - AKA Comand + Q/Ctrl + Q
+            app.ipcRenderer.send('register-pid', child_process_object.pid);
+            // ------
+        }
+    }, [r_manager_state.status, local_state, shiny_manager_state.status]);
+
+    // Shut down from within the app
+    React.useEffect(() => {
+        if (
+            r_manager_state.status == RManagerStatus.READY &&
+            shiny_manager_state.status == ShinyManagerStatus.EXECUTION_SUCCEEDED
+        ) {
+            // BIG DOCUMENTATION: We are ASSUMING that if the user quits the
+            // Shiny, that then returns a successful execution
+            // On successful execution we quit
+            // -----------------------------------------------------------------
+            // Shut Down Logic
+            // -----------------------------------------------------------------
+            // track this id using `main.dev.ts` to delete it
+            // Window Exitying - AKA Comand + Q/Ctrl + Q
+            // app.ipcRenderer.send('pid-message', child_process_object.pid);
+            app.ipcRenderer.send('quit-application');
+            // const current_window = app.remote.getCurrentWindow();
+            // current_window.close();
+            // app.quit()
+            // ------
         }
     }, [r_manager_state.status, local_state, shiny_manager_state.status]);
 

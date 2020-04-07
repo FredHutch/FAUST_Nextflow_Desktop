@@ -9,7 +9,8 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import process from 'process';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -29,10 +30,7 @@ if (process.env.NODE_ENV === 'production') {
     sourceMapSupport.install();
 }
 
-if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-) {
+if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     require('electron-debug')();
 }
 
@@ -41,18 +39,11 @@ const installExtensions = async () => {
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
     const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
-    return Promise.all(
-        extensions.map(name =>
-            installer.default(installer[name], forceDownload)
-        )
-    ).catch(console.log);
+    return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log);
 };
 
 const createWindow = async () => {
-    if (
-        process.env.NODE_ENV === 'development' ||
-        process.env.DEBUG_PROD === 'true'
-    ) {
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
         await installExtensions();
     }
 
@@ -61,8 +52,7 @@ const createWindow = async () => {
         width: 1024,
         height: 728,
         webPreferences:
-            process.env.NODE_ENV === 'development' ||
-            process.env.E2E_BUILD === 'true'
+            process.env.NODE_ENV === 'development' || process.env.E2E_BUILD === 'true'
                 ? {
                       nodeIntegration: true
                   }
@@ -118,4 +108,64 @@ app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) createWindow();
+});
+
+// -----------------------------------------------------------------------------
+// Custom Code
+// -----------------------------------------------------------------------------
+// ------------------------------
+// On Quit of The Application
+// ------------------------------
+// See:
+// https://stackoverflow.com/questions/36031465/electron-kill-child-process-exec
+// https://www.electronjs.org/docs/api/app
+// https://www.electronjs.org/docs/api/ipc-main
+// App close handler
+
+const process_ids: any = [];
+// TODO: Fix this to not error
+const killAllProcesses = (process_ids: any[]) => {
+    const remaining_processes: any[] = [];
+    process_ids.forEach(function(process_id: any) {
+        try {
+            // A simple process_id lookup
+            process.kill(process_id);
+            console.log(`Process ${process_id} has been killed!`);
+        } catch (error) {
+            // console.log(error);
+            // console.log(error.errno);
+            // console.log(error.code);
+            // console.log(error.syscall);
+
+            // console.log(error.code.toLowerCase() === 'esrch');
+            // console.log(error.syscall.toLowerCase() === 'kill');
+            if (error.code.toLowerCase() === 'esrch' && error.syscall.toLowerCase() === 'kill') {
+                // This is fine, it means it tried to kill it and didn't find it
+            } else {
+                console.error('An unexpected error occurred when trying to kill all processes!');
+                remaining_processes.push(process_id);
+            }
+        }
+    });
+    // TODO: Convert to be a return value instead and then rely on setting this
+    // outside of the function
+    process_ids = remaining_processes;
+};
+// --------------------
+// Internal Application Exit
+// --------------------
+ipcMain.on('quit-application', function(event: any, argument: any) {
+    app.quit();
+});
+// --------------------
+// Window Exiting - AKA: Ctrl + Q/CMD + Q
+// --------------------
+ipcMain.on('register-pid', function(event: any, argument: any) {
+    process_ids.push(argument);
+});
+app.on('before-quit', function() {
+    killAllProcesses(process_ids);
+});
+app.on('will-quit', function() {
+    killAllProcesses(process_ids);
 });
