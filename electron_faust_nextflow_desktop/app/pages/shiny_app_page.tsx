@@ -24,18 +24,13 @@ import { Col, Container, Row, Spinner, Table } from 'reactstrap';
 //     FAUSTExecutorReducerActionType,
 //     generateNextflowRunOptions
 // } from '../components/faust_executor';
-import { RManagerStateContext, RManagerStatus } from '../components/r_manager';
-import {
-    ShinyManagerDispatchContext,
-    ShinyManagerReducerActionType,
-    ShinyManagerStateContext,
-    ShinyManagerStatus
-} from '../components/shiny_manager';
+// import { RManagerStateContext, RManagerStatus } from '../components/r_manager';
+import { ShinyManagerStateContext, ShinyManagerStatus } from '../components/shiny_manager';
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
-// import { getErrorPagePath, getResultsPagePath } from '../constants/app_paths';
-import faust_logo_large from '../../resources/faust_icon/6000x3600.png';
+import { getShinyPagePath, getStartUpPagePath } from '../constants/app_paths';
+// import faust_logo_large from '../../resources/faust_icon/6000x3600.png';
 
 interface IProps {}
 export const ShinyAppPage = (props: IProps) => {
@@ -57,11 +52,12 @@ export const ShinyAppPage = (props: IProps) => {
     // -----------
     // Context
     // -----------
-    // N/A
+    const shiny_manager_state = React.useContext(ShinyManagerStateContext);
     // -----------
     // Helpers
     // -----------
-    // N/A
+    const shiny_app_url = `http://${shiny_manager_state.shiny_host}:${shiny_manager_state.shiny_port}`;
+    console.log('Using shiny app url: ' + shiny_app_url);
 
     // -------------------------------------------------------------------------
     // Logic
@@ -88,7 +84,9 @@ export const ShinyAppPage = (props: IProps) => {
                         justifyContent: 'center'
                     }}
                 >
-                    Testing!
+                    <iframe src={shiny_app_url} style={{ height: '100vh', width: '100vw' }}>
+                        If you're seeing this, call my mom.
+                    </iframe>
                 </Col>
             </Row>
         </Container>

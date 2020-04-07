@@ -1,5 +1,5 @@
 export const getStartUpPagePath = () => {
-    return '/';
+    return '/start-up';
 };
 
 export const getShinyPagePath = () => {

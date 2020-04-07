@@ -215,16 +215,6 @@ export const ShinyManager = (props: IProps) => {
                     });
                 }
             });
-
-            const deployed_shiny_url = `http://${shiny_manager_state.shiny_host}:${shiny_manager_state.shiny_port}`;
-            console.log(deployed_shiny_url);
-            setTimeout(() => {
-                // window.location.href = deployed_shiny_url;
-                // window.location.replace(deployed_shiny_url);
-                // history.push(deployed_shiny_url);
-                history.push(getShinyPagePath());
-            }, 2000);
-            // console.log('Redirecting to Shiny!');
         }
     }, [r_manager_state.status, local_state, shiny_manager_state.status]);
 

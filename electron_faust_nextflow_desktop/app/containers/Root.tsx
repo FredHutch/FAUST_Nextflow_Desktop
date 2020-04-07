@@ -7,33 +7,33 @@ import { Store } from '../reducers/types';
 import Routes from '../Routes';
 
 // ---
-import { RManager, RManagerProvider } from '../components/r_manager';
-import { ShinyManager, ShinyManagerProvider } from '../components/shiny_manager';
+// import { RManager, RManagerProvider } from '../components/r_manager';
+// import { ShinyManager, ShinyManagerProvider } from '../components/shiny_manager';
 
 type Props = {
     store: Store;
     history: History;
 };
 
-const Root = ({ store, history }: Props) => (
-    <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <RManagerProvider>
-                <ShinyManagerProvider>
-                    <RManager />
-                    <ShinyManager />
-                    <Routes />
-                </ShinyManagerProvider>
-            </RManagerProvider>
-        </ConnectedRouter>
-    </Provider>
-);
 // const Root = ({ store, history }: Props) => (
 //     <Provider store={store}>
 //         <ConnectedRouter history={history}>
-//             <Routes />
+//             <RManagerProvider>
+//                 <ShinyManagerProvider>
+//                     <RManager />
+//                     <ShinyManager />
+//                     <Routes />
+//                 </ShinyManagerProvider>
+//             </RManagerProvider>
 //         </ConnectedRouter>
 //     </Provider>
 // );
+const Root = ({ store, history }: Props) => (
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <Routes />
+        </ConnectedRouter>
+    </Provider>
+);
 
 export default hot(Root);
