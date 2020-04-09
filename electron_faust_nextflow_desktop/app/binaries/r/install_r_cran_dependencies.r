@@ -17,10 +17,10 @@ default_package_directories_to_remove <- c("help",
                                            file.path("libs", "*dSYM"))
 
 installCranDependencies <- function(cran_packages,
-                                      library_path,
-                                      type,
-                                      decompress,
-                                      remove_dirs = default_package_directories_to_remove) {
+                                    library_path,
+                                    type,
+                                    decompress,
+                                    remove_dirs = default_package_directories_to_remove) {
     if (!length(cran_packages)) {
         stop("No cran packages were specified to install")
     }

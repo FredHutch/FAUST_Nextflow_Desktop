@@ -176,7 +176,7 @@ export const getJavaHomeDirectoryPath = () => {
             console.error('LINUX NOT IMPLEMENTED YET');
             break;
         case OSType.OSX:
-            const osx_home_path = path.join(getBinariesJavaDirectoryPath(), 'osx', 'jdk-14.jdk', 'Contents', 'Home');
+            const osx_home_path = path.join(getBinariesJavaDirectoryPath(), 'osx', 'Contents', 'Home');
             return path.resolve(osx_home_path);
         case OSType.WINDOWS:
             console.error('WINDOWS NOT IMPLEMENTED YET');
