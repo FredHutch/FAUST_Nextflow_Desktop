@@ -127,22 +127,26 @@ github_packages_to_install <- c(
 # TODO: Convert type to be enum
 if (dir.exists("r-mac")) {
     print("==================================================================");
-    print("Installing OSX Specific Dependencies")
+    print("Installing OSX - CRAN dependencies")
     print("==================================================================");
-    print("Installing required CRAN dependencies")
     installCranDependencies(cran_packages = cran_packages_to_install,
                             library_path = file.path("r-mac", "library"),
                             type = "mac.binary.el-capitan",
                             decompress = untar)
-    # print("Installing required BiocManager dependencies")
+    print("==================================================================");
+    print("Installing OSX - BiocManager dependencies")
+    print("==================================================================");
     # installBiocmanagerDependencies(packages = bioc_packages_to_install,
     #                                library_path = file.path("r-mac", "library"),
     #                                type = "mac.binary.el-capitan",
     #                                decompress = untar)
-    # installGitHubDependencies(packages = github_packages_to_install,
-    #                           library_path = file.path("r-mac", "library"),
-    #                           type = "mac.binary.el-capitan",
-    #                           decompress = untar)
+    print("==================================================================");
+    print("Installing OSX - GitHub dependencies")
+    print("==================================================================");
+    installGitHubDependencies(github_packages = github_packages_to_install,
+                              library_path = file.path("r-mac", "library"),
+                              type = "mac.binary.el-capitan",
+                              decompress = untar)
 }
 
 if (dir.exists("r-win")) {
@@ -154,6 +158,12 @@ if (dir.exists("r-win")) {
                             library_path = file.path("r-win", "library"),
                             type = "win.binary",
                             decompress = unzip)
+    print("==================================================================");
+    print("Installing OSX - BiocManager dependencies")
+    print("==================================================================");
     # Install bioc dependencies
+    print("==================================================================");
+    print("Installing OSX - GitHub dependencies")
+    print("==================================================================");
     # Install github dependencies
 }

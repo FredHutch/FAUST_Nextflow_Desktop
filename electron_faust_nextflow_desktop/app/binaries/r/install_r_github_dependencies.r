@@ -2,7 +2,6 @@
 
 # WARNING: This REQUIRES that the `devtools` library is boot strapped using the
 #          `install_r_cran_dependencies.r`
-library("devtools")
 
 default_package_directories_to_remove <- c("help",
                                            "doc",
@@ -17,6 +16,9 @@ installGitHubDependencies <- function(github_packages,
                                       type,
                                       decompress,
                                       remove_dirs = default_package_directories_to_remove) {
+    # This MUST be here - because R imports are the worst
+    library("devtools")
+
     if (!length(github_packages)) {
         stop("No GitHub packages were specified to install")
     }
@@ -34,15 +36,22 @@ installGitHubDependencies <- function(github_packages,
         return(NA)
     }
 
+    pkgbuild::check_build_tools(debug = TRUE)
     temporary_download_directory <- tempdir()
     downloaded_packages <- lapply(selected_github_packages_to_install,
-                                  FUN = function(element) {
+                                  function(element) {
                                       package_repo <- element[1]
                                       package_version <- element[2]
                                       if(is.na(package_version)) {
-                                          new_downloaded_package <- install_github(package_repo,
-                                                                                   destdir = temporary_download_directory,
-                                                                                   type = type)
+                                          new_downloaded_package <- withr::with_libpaths(temporary_download_directory,
+                                                                                         install_github(package_repo,
+                                                                                                        type = type))
+                                          # new_downloaded_package <- install_github(package_repo,
+                                          #                                          lib = temporary_download_directory,
+                                          #                                          type = type)
+                                          # new_downloaded_package <- install_github(package_repo,
+                                          #                                          destdir = temporary_download_directory,
+                                          #                                          type = type)
                                       }
                                       else {
                                           # TODO: Add the `ref` usage here
