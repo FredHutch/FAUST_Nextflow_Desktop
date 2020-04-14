@@ -37,44 +37,44 @@ installGitHubDependencies <- function(github_packages,
     }
 
     pkgbuild::check_build_tools(debug = TRUE)
-    temporary_download_directory <- tempdir()
-    downloaded_packages <- lapply(selected_github_packages_to_install,
-                                  function(element) {
-                                      package_repo <- element[1]
-                                      package_version <- element[2]
-                                      if(is.na(package_version)) {
-                                          new_downloaded_package <- withr::with_libpaths(temporary_download_directory,
-                                                                                         install_github(package_repo,
-                                                                                                        type = type))
-                                          # new_downloaded_package <- install_github(package_repo,
-                                          #                                          lib = temporary_download_directory,
-                                          #                                          type = type)
-                                          # new_downloaded_package <- install_github(package_repo,
-                                          #                                          destdir = temporary_download_directory,
-                                          #                                          type = type)
-                                      }
-                                      else {
-                                          # TODO: Add the `ref` usage here
-                                          # See: https://www.rdocumentation.org/packages/devtools/versions/1.13.6/topics/install_github
-                                          stop("Version targetting has NOT been implemented for GitHub dependencies")
-                                          # new_downloaded_package <- install_github(package_repo,
-                                          #                                          destdir = temporary_download_directory,
-                                          #                                          type = type,
-                                          #                                          version = package_version)
-                                      }
-                                  })
-    lapply(downloaded_packages,
-           FUN = function(element) {
-                compressed_file_path = element[2]
-                decompress(compressed_file_path, exdir = library_path)
-                unlink(compressed_file_path)
-            })
+    # temporary_download_directory <- tempdir()
+    # downloaded_packages <- lapply(selected_github_packages_to_install,
+    #                               function(element) {
+    #                                   package_repo <- element[1]
+    #                                   package_version <- element[2]
+    #                                   if(is.na(package_version)) {
+    #                                       new_downloaded_package <- withr::with_libpaths(temporary_download_directory,
+    #                                                                                      install_github(package_repo,
+    #                                                                                                     type = type))
+    #                                       # new_downloaded_package <- install_github(package_repo,
+    #                                       #                                          lib = temporary_download_directory,
+    #                                       #                                          type = type)
+    #                                       # new_downloaded_package <- install_github(package_repo,
+    #                                       #                                          destdir = temporary_download_directory,
+    #                                       #                                          type = type)
+    #                                   }
+    #                                   else {
+    #                                       # TODO: Add the `ref` usage here
+    #                                       # See: https://www.rdocumentation.org/packages/devtools/versions/1.13.6/topics/install_github
+    #                                       stop("Version targetting has NOT been implemented for GitHub dependencies")
+    #                                       # new_downloaded_package <- install_github(package_repo,
+    #                                       #                                          destdir = temporary_download_directory,
+    #                                       #                                          type = type,
+    #                                       #                                          version = package_version)
+    #                                   }
+    #                               })
+    # lapply(downloaded_packages,
+    #        FUN = function(element) {
+    #             compressed_file_path = element[2]
+    #             decompress(compressed_file_path, exdir = library_path)
+    #             unlink(compressed_file_path)
+    #         })
 
-    z <- lapply(
-        list.dirs(library_path, full.names = TRUE, recursive = FALSE),
-        function(x) {
-            unlink(file.path(x, remove_dirs), force = TRUE, recursive = TRUE)
-        }
-    )
-    invisible(NULL)
+    # z <- lapply(
+    #     list.dirs(library_path, full.names = TRUE, recursive = FALSE),
+    #     function(x) {
+    #         unlink(file.path(x, remove_dirs), force = TRUE, recursive = TRUE)
+    #     }
+    # )
+    # invisible(NULL)
 }

@@ -38,6 +38,7 @@ cran_packages_to_install <- list(
     list("gclus", NA),
     list("gdata", NA),
     list("generics", NA),
+    list("glue", NA),
     list("ggplot2", NA),
     list("ggplotify", NA),
     list("gplots", NA),
@@ -136,10 +137,10 @@ if (dir.exists("r-mac")) {
     print("==================================================================");
     print("Installing OSX - BiocManager dependencies")
     print("==================================================================");
-    # installBiocmanagerDependencies(packages = bioc_packages_to_install,
-    #                                library_path = file.path("r-mac", "library"),
-    #                                type = "mac.binary.el-capitan",
-    #                                decompress = untar)
+    installBiocmanagerDependencies(packages = bioc_packages_to_install,
+                                   library_path = file.path("r-mac", "library"),
+                                   type = "mac.binary.el-capitan",
+                                   decompress = untar)
     print("==================================================================");
     print("Installing OSX - GitHub dependencies")
     print("==================================================================");
@@ -149,21 +150,21 @@ if (dir.exists("r-mac")) {
                               decompress = untar)
 }
 
-if (dir.exists("r-win")) {
-    print("==================================================================");
-    print("Installing Windows Specific Dependencies")
-    print("==================================================================");
-    print("Installing required CRAN dependencies")
-    installCranDependencies(cran_packages = cran_packages_to_install,
-                            library_path = file.path("r-win", "library"),
-                            type = "win.binary",
-                            decompress = unzip)
-    print("==================================================================");
-    print("Installing OSX - BiocManager dependencies")
-    print("==================================================================");
-    # Install bioc dependencies
-    print("==================================================================");
-    print("Installing OSX - GitHub dependencies")
-    print("==================================================================");
-    # Install github dependencies
-}
+# if (dir.exists("r-win")) {
+#     print("==================================================================");
+#     print("Installing Windows Specific Dependencies")
+#     print("==================================================================");
+#     print("Installing required CRAN dependencies")
+#     installCranDependencies(cran_packages = cran_packages_to_install,
+#                             library_path = file.path("r-win", "library"),
+#                             type = "win.binary",
+#                             decompress = unzip)
+#     print("==================================================================");
+#     print("Installing OSX - BiocManager dependencies")
+#     print("==================================================================");
+#     # Install bioc dependencies
+#     print("==================================================================");
+#     print("Installing OSX - GitHub dependencies")
+#     print("==================================================================");
+#     # Install github dependencies
+# }

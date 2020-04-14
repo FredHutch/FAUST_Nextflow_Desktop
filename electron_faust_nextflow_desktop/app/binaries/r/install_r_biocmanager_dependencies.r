@@ -22,7 +22,8 @@ installBiocmanagerDependencies <- function(packages,
     print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
     print("BiocManager!")
     if (!length(packages)) {
-        stop("No cran packages were specified to install")
+        print("No packages were specified to install")
+        return(NA)
     }
 
     previously_installed_libraries <- list.files(library_path)
@@ -108,5 +109,5 @@ installBiocmanagerDependencies <- function(packages,
             unlink(file.path(x, remove_dirs), force = TRUE, recursive = TRUE)
         }
     )
-    invisible(NULL)
+    # invisible(NULL)
 }

@@ -22,7 +22,8 @@ installCranDependencies <- function(cran_packages,
                                     decompress,
                                     remove_dirs = default_package_directories_to_remove) {
     if (!length(cran_packages)) {
-        stop("No cran packages were specified to install")
+        print("No cran packages were specified to install")
+        return(NA)
     }
 
     previously_installed_libraries <- list.files(library_path)
@@ -70,5 +71,5 @@ installCranDependencies <- function(cran_packages,
             unlink(file.path(x, remove_dirs), force = TRUE, recursive = TRUE)
         }
     )
-    invisible(NULL)
+    # invisible(NULL)
 }
