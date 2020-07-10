@@ -151,7 +151,8 @@ export const getStartShinyAppCommand = () => {
 // Needed for the start script to know what to target
 export const getShinyAppFilePath = (): string => {
     const shiny_app_directory_path = getShinyAppDirectoryPath();
-    const shiny_app_file_path = path.join(shiny_app_directory_path, 'faust_tools', 'inst', 'FAUSTApp', 'app.R');
+    // const shiny_app_file_path = path.join(shiny_app_directory_path, 'debug_server', 'app.R');
+    const shiny_app_file_path = path.join(shiny_app_directory_path, 'faust_tools', 'inst', 'NewFAUSTApp', 'app.R');
     return path.resolve(shiny_app_file_path);
 };
 

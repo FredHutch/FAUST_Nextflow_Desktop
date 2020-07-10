@@ -3,9 +3,7 @@
 # Taken from here
 # https://github.com/dirkschumacher/r-shiny-electron/blob/master/add-cran-binary-pkgs.R
 
-source("install_r_biocmanager_dependencies.r")
-source("install_r_cran_dependencies.r")
-source("install_r_github_dependencies.r")
+# source("install_r_github_dependencies.r")
 
 cran_packages_to_install <- list(
     # For FAUST_Tools
@@ -107,7 +105,7 @@ cran_packages_to_install <- list(
     list("xtable", NA),
     list("xml2", NA),
     list("yaml", NA)
-    # # For FAUST_Desktop_Application's electron execution
+    # For FAUST_Desktop_Application's electron execution
     # list("backports", NA),
     # list("here", NA),
     # list("rprojroot", NA)
@@ -115,18 +113,17 @@ cran_packages_to_install <- list(
 )
 
 bioc_packages_to_install <- list(
-    # list("flowCore", NA),
-    # list("flowWorkspace", NA)
-)
-
-github_packages_to_install <- c(
-    list("RGLab/RProtoBufLib", NA),
-    list("RGLab/flowCore", NA),
-    list("RGLab/flowWorkspace", NA)
+    list("RProtoBufLib", 3.11),
+    list("cytolib", 3.11),
+    list("flowCore", 3.11),
+    list("flowWorkspace", 3.11),
+    list("openCyto", 3.11),
+    list("CytoML", 3.11)
 )
 
 # TODO: Convert type to be enum
 if (dir.exists("r-mac")) {
+    source("install_r_cran_dependencies.r")
     print("==================================================================");
     print("Installing OSX - CRAN dependencies")
     print("==================================================================");
@@ -134,6 +131,7 @@ if (dir.exists("r-mac")) {
                             library_path = file.path("r-mac", "library"),
                             type = "mac.binary.el-capitan",
                             decompress = untar)
+    source("install_r_biocmanager_dependencies.r")
     print("==================================================================");
     print("Installing OSX - BiocManager dependencies")
     print("==================================================================");
@@ -141,13 +139,6 @@ if (dir.exists("r-mac")) {
                                    library_path = file.path("r-mac", "library"),
                                    type = "mac.binary.el-capitan",
                                    decompress = untar)
-    print("==================================================================");
-    print("Installing OSX - GitHub dependencies")
-    print("==================================================================");
-    installGitHubDependencies(github_packages = github_packages_to_install,
-                              library_path = file.path("r-mac", "library"),
-                              type = "mac.binary.el-capitan",
-                              decompress = untar)
 }
 
 # if (dir.exists("r-win")) {

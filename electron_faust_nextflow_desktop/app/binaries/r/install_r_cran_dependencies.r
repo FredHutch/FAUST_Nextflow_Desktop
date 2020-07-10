@@ -48,7 +48,8 @@ installCranDependencies <- function(cran_packages,
                                           new_downloaded_package <- download.packages(package_name,
                                                                                       destdir = temporary_download_directory,
                                                                                       repo = default_cran_repo_url,
-                                                                                      type = type)
+                                                                                      type = type
+                                                                                      )
                                       }
                                       else {
                                           new_downloaded_package <- download.packages(package_name,
