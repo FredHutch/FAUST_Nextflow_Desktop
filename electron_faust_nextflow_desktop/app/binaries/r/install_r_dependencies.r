@@ -1,7 +1,15 @@
-#!/usr/bin/env Rscript
-
 # Taken from here
 # https://github.com/dirkschumacher/r-shiny-electron/blob/master/add-cran-binary-pkgs.R
+
+
+
+message("---------------------------------------------------------------------")
+message("Beginning R Dependencies Installation!")
+message("---------------------------------------------------------------------")
+r_version_library_directory_path = Sys.getenv("R_VERSION_LIBRARY_DIRECTORY_RELATIVE_PATH")
+message(r_version_library_directory_path)
+message(.libPaths())
+
 
 # source("install_r_github_dependencies.r")
 
@@ -109,7 +117,6 @@ cran_packages_to_install <- list(
     # list("backports", NA),
     # list("here", NA),
     # list("rprojroot", NA)
-
 )
 
 bioc_packages_to_install <- list(
@@ -128,16 +135,17 @@ if (dir.exists("r-mac")) {
     print("Installing OSX - CRAN dependencies")
     print("==================================================================");
     installCranDependencies(cran_packages = cran_packages_to_install,
-                            library_path = file.path("r-mac", "library"),
-                            type = "mac.binary.el-capitan",
+                            library_path = r_version_library_directory_path,
+                            # type = "mac.binary.el-capitan",
                             decompress = untar)
     source("install_r_biocmanager_dependencies.r")
     print("==================================================================");
     print("Installing OSX - BiocManager dependencies")
     print("==================================================================");
     installBiocmanagerDependencies(packages = bioc_packages_to_install,
-                                   library_path = file.path("r-mac", "library"),
-                                   type = "mac.binary.el-capitan",
+                                   # library_path = file.path("r-mac", "library"),
+                                   library_path = r_version_library_directory_path,
+                                   # type = "mac.binary.el-capitan",
                                    decompress = untar)
 }
 

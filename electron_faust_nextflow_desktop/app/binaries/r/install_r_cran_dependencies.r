@@ -1,20 +1,20 @@
-#!/usr/bin/env Rscript
-
 # Heavily edited from here:
 # https://github.com/dirkschumacher/r-shiny-electron/blob/master/add-cran-binary-pkgs.R
 
 # Script to find dependencies of a pkg list, download binaries and put them
 # In the standalone R library.
 
-default_cran_repo_url = "https://cloud.r-project.org"
+default_cran_repo_url <- "https://cloud.r-project.org"
 
-default_package_directories_to_remove <- c("help",
-                                           "doc",
-                                           "tests",
-                                           "html",
-                                           "include",
-                                           "unitTests",
-                                           file.path("libs", "*dSYM"))
+default_package_directories_to_remove <- c(
+    "help",
+    "doc",
+    "tests",
+    "html",
+    "include",
+    "unitTests",
+    file.path("libs", "*dSYM")
+)
 
 installCranDependencies <- function(cran_packages,
                                     library_path,
@@ -27,11 +27,14 @@ installCranDependencies <- function(cran_packages,
     }
 
     previously_installed_libraries <- list.files(library_path)
-    requested_packages_to_install <- lapply(cran_packages, 
-                                            FUN = function(x) x[[1]])
+    requested_packages_to_install <- lapply(cran_packages,
+        FUN = function(x) x[[1]]
+    )
     requested_packages_to_install <- unlist(requested_packages_to_install)
-    detected_cran_packages_to_install <- setdiff(requested_packages_to_install,
-                                                 previously_installed_libraries)
+    detected_cran_packages_to_install <- setdiff(
+        requested_packages_to_install,
+        previously_installed_libraries
+    )
     selected_cran_packages_to_install <- cran_packages[!(requested_packages_to_install %in% previously_installed_libraries)]
 
     if (length(selected_cran_packages_to_install) == 0) {
@@ -39,38 +42,20 @@ installCranDependencies <- function(cran_packages,
         return(NA)
     }
 
-    temporary_download_directory <- tempdir()
-    downloaded_packages <- lapply(selected_cran_packages_to_install,
-                                  FUN = function(element) {
-                                      package_name <- element[1]
-                                      package_version <- element[2]
-                                      if(is.na(package_version)) {
-                                          new_downloaded_package <- download.packages(package_name,
-                                                                                      destdir = temporary_download_directory,
-                                                                                      repo = default_cran_repo_url,
-                                                                                      type = type
-                                                                                      )
-                                      }
-                                      else {
-                                          new_downloaded_package <- download.packages(package_name,
-                                                                                      destdir = temporary_download_directory,
-                                                                                      repo = default_cran_repo_url,
-                                                                                      type = type,
-                                                                                      version = package_version)
-                                      }
-                                  })
-    lapply(downloaded_packages,
-           FUN = function(element) {
-                compressed_file_path = element[2]
-                decompress(compressed_file_path, exdir = library_path)
-                unlink(compressed_file_path)
-            })
-
-    z <- lapply(
-        list.dirs(library_path, full.names = TRUE, recursive = FALSE),
-        function(x) {
-            unlink(file.path(x, remove_dirs), force = TRUE, recursive = TRUE)
+    for (package_to_install in selected_cran_packages_to_install) {
+        # print("-------------------------")
+        package_name <- package_to_install[[1]]
+        package_version <- package_to_install[[2]]
+        print(package_name)
+        print(package_version)
+        if (is.na(package_version)) {
+            install.packages(package_name, repos = default_cran_repo_url)
         }
-    )
-    # invisible(NULL)
+        else {
+            install.packages(package_name,
+                repos = default_cran_repo_url,
+                version = package_version
+            )
+        }
+    }
 }
