@@ -10,8 +10,8 @@
 // Third-Party Libraries
 // -----------------------------------------------------------------------------
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import { Col, Container, Row, Spinner, Table } from 'reactstrap';
+// import { useHistory } from 'react-router-dom';
+import { Col, Container, Row } from 'reactstrap';
 // -----------------------------------------------------------------------------
 // Custom Components
 // -----------------------------------------------------------------------------
@@ -29,7 +29,7 @@ import { ShinyManagerStateContext, ShinyManagerStatus } from '../components/shin
 // -----------------------------------------------------------------------------
 // Resources
 // -----------------------------------------------------------------------------
-import { getShinyPagePath, getStartUpPagePath } from '../constants/app_paths';
+import { getShinyPagePath } from '../constants/app_paths';
 // import faust_logo_large from '../../resources/faust_icon/6000x3600.png';
 
 interface IProps {}
@@ -48,7 +48,7 @@ export const ShinyAppPage = (props: IProps) => {
     // -----------
     // Hooks
     // -----------
-    // N/A
+    // const history = useHistory();
     // -----------
     // Context
     // -----------
@@ -84,7 +84,22 @@ export const ShinyAppPage = (props: IProps) => {
                         justifyContent: 'center'
                     }}
                 >
-                    <iframe src={shiny_app_url} style={{ height: '100vh', width: '100vw' }}>
+                    {/*
+                    // WARNING - Re-enable this to support issues with the iframe
+                    //           not loading
+                    <button
+                        onClick={() => {
+                            console.log('REDIRECTING to ' + getShinyPagePath());
+                            const shiny_app_iframe_element: any = document.getElementById('shiny-app');
+                            if (shiny_app_iframe_element !== null) {
+                                shiny_app_iframe_element.src = shiny_app_url;
+                            }
+                        }}
+                    >
+                        Reload
+                    </button>
+                    */}
+                    <iframe id="shiny-app" src={shiny_app_url} style={{ height: '100vh', width: '100vw' }}>
                         If you're seeing this, call my mom.
                     </iframe>
                 </Col>

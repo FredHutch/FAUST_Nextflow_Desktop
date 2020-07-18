@@ -110,11 +110,20 @@ export const StartUpPage = (props: IProps) => {
             shiny_manager_state.status === ShinyManagerStatus.EXECUTION_RUNNING &&
             local_state.was_redirect_triggered === false
         ) {
-            console.log('REDIRECTING');
+            console.log('REDIRECTING to ' + getShinyPagePath());
             setTimeout(() => {
                 history.push(getShinyPagePath());
-            }, 5000);
+            }, 12500);
+
             setLocalState({ ...local_state, was_redirect_triggered: true });
+            // -------------------------
+            // const shiny_app_url = `http://${shiny_manager_state.shiny_host}:${shiny_manager_state.shiny_port}`;
+            // console.log('REDIRECTING to ' + shiny_app_url);
+            // setTimeout(() => {
+            //     history.push(shiny_app_url);
+            //     // window.location.href = shiny_app_url;
+            // }, 5000);
+            // setLocalState({ ...local_state, was_redirect_triggered: true });
         }
     }, [r_manager_state.status, shiny_manager_state.status]);
 

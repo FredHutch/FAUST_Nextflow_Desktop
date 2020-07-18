@@ -156,23 +156,28 @@ export const ShinyManager = (props: IProps) => {
             process.env.R_HOME_DIR = getRDirectoryPath();
             process.env.R_HOME = getRDirectoryPath();
             process.env.JAVA_HOME = getJavaHomeDirectoryPath();
+            process.env.NXF_JAVA_HOME = getJavaHomeDirectoryPath();
             // ---
             process.env.FAUST_TOOLS_SHINY_FILE_PATH = getShinyAppFilePath();
             process.env.FAUST_TOOLS_SHINY_URL = shiny_manager_state.shiny_host;
             process.env.FAUST_TOOLS_SHINY_PORT = `${shiny_manager_state.shiny_port}`;
             // ---
-            console.log(process.env.R_HOME_DIR);
-            console.log(process.env.R_HOME);
-            console.log(process.env.JAVA_HOME);
-            console.log(process.env.FAUST_TOOLS_SHINY_FILE_PATH);
-            console.log(process.env.FAUST_TOOLS_SHINY_URL);
-            console.log(process.env.FAUST_TOOLS_SHINY_PORT);
+            console.log('-------------------------------');
+            console.log('R_HOME_DIR: ' + process.env.R_HOME_DIR);
+            console.log('R_HOME: ' + process.env.R_HOME);
+            console.log('JAVA_HOME: ' + process.env.JAVA_HOME);
+            console.log('NEXTFLOW_EXECUTABLE_FILE_PATH: TODO - make this happen');
+            console.log('FAUST_TOOLS_SHINY_FILE_PATH: ' + process.env.FAUST_TOOLS_SHINY_FILE_PATH);
+            console.log('FAUST_TOOLS_SHINY_URL: ' + process.env.FAUST_TOOLS_SHINY_URL);
+            console.log('FAUST_TOOLS_SHINY_PORT: ' + process.env.FAUST_TOOLS_SHINY_PORT);
 
+            const shiny_app_url = `http://${process.env.FAUST_TOOLS_SHINY_URL}:${process.env.FAUST_TOOLS_SHINY_PORT}`;
             const start_shiny_app_command = getStartShinyAppCommand();
             // const command = `${r_executable_file_path} --help`;
-            console.log('--------------');
             console.log('RUNNING SHINY');
+            console.log('shiny_app_url:' + shiny_app_url);
             console.log('command:' + start_shiny_app_command);
+            console.log('current directory:' + process.cwd());
             // console.log('commands: ' + command);
             const child_process_object = child_process.exec(start_shiny_app_command, function(
                 error: any,

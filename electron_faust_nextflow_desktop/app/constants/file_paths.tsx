@@ -64,30 +64,28 @@ export const getRandomPort = (): number => {
 // ------------------------------------------------------------------------------
 export const getBinariesDirectoryPath = () => {
     let app_path: null | string = null;
-    console.log(process.env.NODE_ENV);
-    console.log(process.env.DEBUG_PROD);
+    // console.log("process.env.NODE_ENV: " + process.env.NODE_ENV);
+    // console.log("process.env.DEBUG_PROD: " + process.env.DEBUG_PROD);
     if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
         app_path = path.join('app');
     } else {
         app_path = path.join(app.getAppPath(), '..');
     }
-    console.log('APP PATH: ' + app_path);
+    // console.log('APP PATH: ' + app_path);
     const binaries_directory_path = path.join(app_path, binaries_directory_name);
-    console.log('binaries_directory_path: ' + binaries_directory_path);
+    // console.log('binaries_directory_path: ' + binaries_directory_path);
     return path.resolve(binaries_directory_path);
 };
 
 export const getRTopLevelDirectoryPath = () => {
     const r_top_level_directory_path = path.join(getBinariesDirectoryPath(), 'r');
-    // console.log('R_Package_path: ' + r_top_level_directory_path);
-    console.log('r_top_level_directory_path: ' + r_top_level_directory_path);
+    // console.log('r_top_level_directory_path: ' + r_top_level_directory_path);
     return path.resolve(r_top_level_directory_path);
 };
 
 export const getRDirectoryPath = () => {
     const r_directory_path = path.join(getRTopLevelDirectoryPath(), 'r-mac');
-    // console.log('R_Package_path: ' + r_directory_path);
-    console.log('r_directory_path: ' + r_directory_path);
+    // console.log('r_directory_path: ' + r_directory_path);
     return path.resolve(r_directory_path);
 };
 
@@ -99,18 +97,13 @@ export const getRDirectoryPath = () => {
 export const getRFilePath = (): string => {
     const r_version = '4.0.2';
     const r_file_path = path.join(getRTopLevelDirectoryPath(), 'r-mac', r_version, 'bin', 'R');
-    console.log('r_file_path: ' + r_file_path);
+    // console.log('r_file_path: ' + r_file_path);
     return path.resolve(r_file_path);
 };
-// export const getRFilePath = (r_version_name: string): string => {
-//     const r_file_path = path.join(getRDirectoryPath(), 'r', 'r-mac', r_version_name, 'bin', 'R');
-//     console.log('r_file_path: ' + r_file_path);
-//     return path.resolve(r_file_path);
-// };
 
 export const getRScriptFilePath = () => {
     const r_script_file_path = path.join(getBinariesDirectoryPath(), 'r', 'r-mac', 'Rscript');
-    console.log('r_script_file_path: ' + r_script_file_path);
+    // console.log('r_script_file_path: ' + r_script_file_path);
     return path.resolve(r_script_file_path);
 };
 
@@ -165,7 +158,6 @@ export const getStartShinyAppCommand = () => {
 // Needed for the start script to know what to target
 export const getShinyAppFilePath = (): string => {
     const shiny_app_directory_path = getShinyAppDirectoryPath();
-    // const shiny_app_file_path = path.join(shiny_app_directory_path, 'debug_server', 'app.R');
     const shiny_app_file_path = path.join(shiny_app_directory_path, 'faust_tools', 'inst', 'NewFAUSTApp', 'app.R');
     return path.resolve(shiny_app_file_path);
 };
