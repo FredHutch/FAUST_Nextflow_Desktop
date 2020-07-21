@@ -190,3 +190,26 @@ export const getJavaHomeDirectoryPath = () => {
             break;
     }
 };
+
+// ------------------------------------------------------------------------------
+// Nextflow
+// ------------------------------------------------------------------------------
+export const getBinariesNextflowDirectoryPath = () => {
+    const binaries_nextflow_directory_path = path.join(getBinariesDirectoryPath(), 'nextflow');
+    return path.resolve(binaries_nextflow_directory_path);
+};
+
+export const getNextflowExecutableFilePath = () => {
+    const current_os_type = getOSType();
+    switch (current_os_type) {
+        case OSType.LINUX:
+            console.error('LINUX NOT IMPLEMENTED YET');
+            break;
+        case OSType.OSX:
+            const osx_home_path = path.join(getBinariesNextflowDirectoryPath(), 'nextflow');
+            return path.resolve(osx_home_path);
+        case OSType.WINDOWS:
+            console.error('WINDOWS NOT IMPLEMENTED YET');
+            break;
+    }
+};
