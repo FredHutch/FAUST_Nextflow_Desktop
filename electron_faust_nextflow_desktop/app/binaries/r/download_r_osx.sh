@@ -31,8 +31,6 @@ rm $R_VERSION_COMPRESSED_FILE_NAME
 cd ../
 # ------------------------------------------------------------------------------
 # Perform build
-# mkdir -p "$R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH"
-# cd "$R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH"
 cd $R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH
 
 echo "-------------------------------------------------------------------------"
