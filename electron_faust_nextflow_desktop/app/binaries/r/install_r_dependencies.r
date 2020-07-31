@@ -27,6 +27,7 @@ cran_packages_to_install <- list(
     list("cowplot", NA),
     list("crayon", NA),
     list("crosstalk", NA),
+    list("data.table", NA),
     list("DBI", NA),
     list("dendextend", NA),
     list("desc", NA),
@@ -53,7 +54,7 @@ cran_packages_to_install <- list(
     list("gtable", NA),
     list("gtools", NA),
     list("haven", NA),
-    list("heatmaply", NA),
+    # list("heatmaply", NA),
     list("hms", NA),
     list("htmltools", NA),
     list("htmlwidgets", NA),
@@ -64,7 +65,6 @@ cran_packages_to_install <- list(
     list("later", NA),
     list("lazyeval", NA),
     list("lubridate", NA),
-    list("magick", NA),
     list("magrittr", NA),
     list("memoise", NA),
     list("mime", NA),
@@ -115,6 +115,7 @@ cran_packages_to_install <- list(
     list("xtable", NA),
     list("xml2", NA),
     list("yaml", NA)
+    # --------------------------------------------------------------------------
     # For FAUST_Desktop_Application's electron execution
     # list("backports", NA),
     # list("here", NA),
@@ -132,11 +133,12 @@ bioc_packages_to_install <- list(
 
 # TODO: Convert type to be enum
 if (dir.exists("r-mac")) {
+    sessionInfo()
     source("install_r_cran_dependencies.r")
     print("==================================================================");
     print("Installing OSX - CRAN dependencies")
     print("==================================================================");
-    installCranDependencies(cran_packages = cran_packages_to_install,
+    installCranDependencies(packages = cran_packages_to_install,
                             library_path = r_version_library_directory_path,
                             # type = "mac.binary.el-capitan",
                             decompress = untar)

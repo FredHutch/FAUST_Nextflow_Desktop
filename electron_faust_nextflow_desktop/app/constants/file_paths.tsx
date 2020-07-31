@@ -84,7 +84,8 @@ export const getRTopLevelDirectoryPath = () => {
 };
 
 export const getRDirectoryPath = () => {
-    const r_directory_path = path.join(getRTopLevelDirectoryPath(), 'r-mac');
+    const r_version = '4.0.2';
+    const r_directory_path = path.join(getRTopLevelDirectoryPath(), 'r-mac', r_version);
     // console.log('r_directory_path: ' + r_directory_path);
     return path.resolve(r_directory_path);
 };
@@ -95,8 +96,7 @@ export const getRDirectoryPath = () => {
 //     return path.resolve(r_file_path);
 // };
 export const getRFilePath = (): string => {
-    const r_version = '4.0.2';
-    const r_file_path = path.join(getRTopLevelDirectoryPath(), 'r-mac', r_version, 'bin', 'R');
+    const r_file_path = path.join(getRDirectoryPath(), 'bin', 'R');
     // console.log('r_file_path: ' + r_file_path);
     return path.resolve(r_file_path);
 };

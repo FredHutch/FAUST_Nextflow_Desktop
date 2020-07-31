@@ -12,8 +12,9 @@ CURRENT_DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null 2>&1 && pwd
 INSTALLATION_DIRECTORY_ABSOLUTE_PATH=$CURRENT_DIRECTORY/$R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH
 
 # ------------------------------------------------------------------------------
-# Clean up
+# Clean up pre-existing builds
 rm -fr $R_MAC_DIRECTORY_NAME
+
 # ------------------------------------------------------------------------------
 # Download and extract the source code for R
 mkdir -p $R_MAC_DIRECTORY_NAME
@@ -28,7 +29,9 @@ tar -xzvf $R_VERSION_COMPRESSED_FILE_NAME
 mv "$R_VERSION_NAME" "$R_VERSION_BUILD_DIRECTORY_NAME"
 rm $R_VERSION_COMPRESSED_FILE_NAME
 
+# Return to root directory
 cd ../
+
 # ------------------------------------------------------------------------------
 # Perform build
 cd $R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH
@@ -46,98 +49,29 @@ echo "-------------------------------------------------------------------------"
 # Actual build entry point
 make
 make install
-# # ----------------------------------------
 
-# # Move to the root directory
-# cd ../../../
-# # Move the build directory to the root directory and follow it
-# mv $R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH ./
+# Return to root directory
+cd ../
 
-# # Remove all the unneeded files from the installation
-# rm -fr $R_VERSION_DIRECTORY_RELATIVE_PATH/*
-
-# # Move the contends of the build directory (aka the build artifact) to the
-# # version directory directory
-# mv $R_VERSION_INSTALL_DIRECTORY_NAME/* $R_VERSION_DIRECTORY_RELATIVE_PATH
-# # Remove the now empty directory
-# rm -fr $R_VERSION_INSTALL_DIRECTORY_NAME
-# # Move into the newly built R version directory
-# cd $R_VERSION_DIRECTORY_RELATIVE_PATH
 # # ------------------------------------------------------------------------------
-# # Inject logic to override the initial configuration and point to the correct
-# # shiny executable
+# # For some reason the `$R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH` has a `lib`
+# # directory that actually contains the ACTUAL R Files
+# # So you need to move the files of that directory to the correct directory in
+# # order to avoid errors like `ldpaths not found`
+mkdir -p $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
+cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/lib/R/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
+# cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
 
-# # cd R-${R_VERSION}
+# ------------------------------------------------------------------------------
+# Inject logic to override the initial configuration and point to the correct
+# shiny executable
 
-# # # Patch the main R script
-# sed -i.bak '/^R_HOME_DIR=/d' bin/R
-# sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' bin/R
-# chmod +x bin/R
-# rm -f bin/R.bak
-
-# # # Move to the root directory
-# # cd ../../../
-# # # Move the build directory to the root directory and follow it
-# # mv $R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH ./
-
-# # # Remove all the unneeded files from the installation
-# # rm -fr $R_VERSION_DIRECTORY_RELATIVE_PATH/*
-
-# # # Move the contends of the build directory (aka the build artifact) to the
-# # # version directory directory
-# # mv $R_VERSION_BUILD_DIRECTORY_NAME/* $R_VERSION_DIRECTORY_RELATIVE_PATH
-# # # Remove the now empty directory
-# # rm -fr $R_VERSION_BUILD_DIRECTORY_NAME
-# # # Move into the newly built R version directory
-# # cd $R_VERSION_DIRECTORY_RELATIVE_PATH
-# # # ------------------------------------------------------------------------------
-# # # Inject logic to override the initial configuration and point to the correct
-# # # shiny executable
-
-# # # cd R-${R_VERSION}
-
-# # # # Patch the main R script
-# # sed -i.bak '/^R_HOME_DIR=/d' bin/R
-# # sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' bin/R
-# # chmod +x bin/R
-# # rm -f bin/R.bak
-
-# # # Also TODO: Not sure if this really helps us besides reducing footprint
-# # # Remove unneccessary files
-# # # TODO: What else
-# # # rm -r doc tests
-# # # rm -r lib/*.dSYM
-# # # ------------------------------------------------------------------------------
-# # # # !/usr/bin/env bash
-# # # # Taken from here:
-# # # # https://github.com/dirkschumacher/r-shiny-electron/blob/master/get-r-mac.sh
-# # # set -e
-
-# # # R_VERSION=3.5.1
-# # # # R_VERSION=3.6.3
-# # # # R_VERSION=4.0.0
-
-# # # # Download and extract the main Mac Resources directory
-# # # # Requires xar and cpio, both installed in the Dockerfile
-# # # rm -fr r-mac
-# # # mkdir -p r-mac
-# # # curl --output r-mac/latest_r.pkg \
-# # #      https://cloud.r-project.org/bin/macosx/R-${R_VERSION}.pkg
-# # #      # https://cloud.r-project.org/bin/macosx/R-3.5.1.pkg # Old Version
-
-# # # cd r-mac
-# # # xar -xf latest_r.pkg
-# # # rm -r r-1.pkg Resources tcltk8.pkg texinfo5.pkg Distribution latest_r.pkg
-# # # cat r.pkg/Payload | gunzip -dc | cpio -i
-# # # mv R.framework/Versions/Current/Resources/* .
-# # # rm -r r.pkg R.framework
-
-# # # # Patch the main R script
-# # # sed -i.bak '/^R_HOME_DIR=/d' bin/R
-# # # sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' bin/R
-# # # chmod +x bin/R
-# # # rm -f bin/R.bak
-
-# # # # Remove unneccessary files TODO: What else
-# # # rm -r doc tests
-# # # rm -r lib/*.dSYM
+# Patch the main R script
+sed -i.bak '/^R_HOME_DIR=/d' $R_VERSION_BINARY_R_FILE_RELATIVE_PATH
+sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' $R_VERSION_BINARY_R_FILE_RELATIVE_PATH
+chmod +x $R_VERSION_BINARY_R_FILE_RELATIVE_PATH
+rm -f $R_VERSION_BINARY_R_FILE_RELATIVE_PATH.bak
+# # ------------------------------------------------------------------------------
+# # Perform Clean up - only the final artifact should remain
+# rm -fr $R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH
+# rm -fr $R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH

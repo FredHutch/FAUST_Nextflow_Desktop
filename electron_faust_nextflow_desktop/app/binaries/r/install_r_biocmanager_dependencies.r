@@ -31,15 +31,15 @@ installBiocmanagerDependencies <- function(packages,
         return(NA)
     }
 
-    previously_installed_libraries <- list.files(library_path)
+    previously_installed_packages <- list.files(library_path)
     requested_packages_to_install <- lapply(packages,
-                                            function(x) x[[1]])
+                                            FUN = function(x) x[[1]])
     requested_packages_to_install <- unlist(requested_packages_to_install)
     detected_packages_to_install <- setdiff(requested_packages_to_install,
-                                                 previously_installed_libraries)
-    selected_packages_to_install <- packages[!(requested_packages_to_install %in% previously_installed_libraries)]
+                                            previously_installed_packages)
+    selected_packages_to_install <- packages[!(requested_packages_to_install %in% previously_installed_packages)]
 
-    print(paste0("previously_installed_libraries: ", previously_installed_libraries))
+    print(paste0("previously_installed_packages: ", previously_installed_packages))
     print(paste0("requested_packages_to_install: ", requested_packages_to_install))
     print(paste0("detected_packages_to_install: ", detected_packages_to_install))
     print(paste0("selected_packages_to_install: ", selected_packages_to_install))
@@ -55,13 +55,21 @@ installBiocmanagerDependencies <- function(packages,
         print(package_name)
         print(package_version)
         if(is.na(package_version)) {
-            install.packages(package_name, repos = default_cran_repo_url)
+            # BiocManager::install(package_name,
+            #                         destdir = r_version_library_directory_path)
+            # BiocManager::install(package_name,
+            #                      lib = r_version_library_directory_path)
             BiocManager::install(package_name,
-                                    destdir = temporary_download_directory_path)
+                                 # dependencies = TRUE
+                                 )
         }
         else {
+            # BiocManager::install(package_name,
+            #                      lib = r_version_library_directory_path,
+            #                      version = package_version)
             BiocManager::install(package_name,
-                                version = package_version)
+                                 # dependencies = TRUE,
+                                 version = package_version)
         }
     }
 }

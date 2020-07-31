@@ -87,6 +87,7 @@ export const ShinyAppPage = (props: IProps) => {
                     {/*
                     // WARNING - Re-enable this to support issues with the iframe
                     //           not loading
+                    */}
                     <button
                         onClick={() => {
                             console.log('REDIRECTING to ' + getShinyPagePath());
@@ -98,7 +99,6 @@ export const ShinyAppPage = (props: IProps) => {
                     >
                         Reload
                     </button>
-                    */}
                     <iframe id="shiny-app" src={shiny_app_url} style={{ height: '100vh', width: '100vw' }}>
                         If you're seeing this, call my mom.
                     </iframe>
