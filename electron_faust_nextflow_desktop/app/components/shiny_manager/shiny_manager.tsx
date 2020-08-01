@@ -154,8 +154,8 @@ export const ShinyManager = (props: IProps) => {
             //              Rscript is broken :'(
             // The same goes for Java
             // The same goes for the Shiny App out of convenience
-            process.env.R_HOME_DIR = getRDirectoryPath();
-            process.env.R_HOME = getRDirectoryPath();
+            // process.env.R_HOME_DIR = getRDirectoryPath();
+            // process.env.R_HOME = getRDirectoryPath();
             process.env.JAVA_HOME = getJavaHomeDirectoryPath();
             process.env.NXF_JAVA_HOME = getJavaHomeDirectoryPath();
             // ---

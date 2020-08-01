@@ -59,8 +59,8 @@ cd ../
 # # So you need to move the files of that directory to the correct directory in
 # # order to avoid errors like `ldpaths not found`
 mkdir -p $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
-cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/lib/R/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
-# cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
+# cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/lib/R/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
+cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
 
 # ------------------------------------------------------------------------------
 # Inject logic to override the initial configuration and point to the correct
@@ -71,6 +71,12 @@ sed -i.bak '/^R_HOME_DIR=/d' $R_VERSION_BINARY_R_FILE_RELATIVE_PATH
 sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' $R_VERSION_BINARY_R_FILE_RELATIVE_PATH
 chmod +x $R_VERSION_BINARY_R_FILE_RELATIVE_PATH
 rm -f $R_VERSION_BINARY_R_FILE_RELATIVE_PATH.bak
+
+# Patch the nested R script
+sed -i.bak '/^R_HOME_DIR=/d' "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R"
+sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R"
+chmod +x "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R"
+rm -f "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R".bak
 # # ------------------------------------------------------------------------------
 # # Perform Clean up - only the final artifact should remain
 # rm -fr $R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH

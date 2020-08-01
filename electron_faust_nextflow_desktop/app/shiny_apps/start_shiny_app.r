@@ -1,5 +1,7 @@
 print("Beginning FAUST Shiny App Deployment")
 
+.libPaths()
+
 library("shiny")
 
 SHINY_APP_FILE_PATH <- Sys.getenv("FAUST_TOOLS_SHINY_FILE_PATH")
