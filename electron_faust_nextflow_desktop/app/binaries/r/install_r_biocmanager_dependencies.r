@@ -5,12 +5,6 @@
 print("---------------------------------------------------------------------")
 print("Beginning BiocManager Dependency Installation!")
 print("---------------------------------------------------------------------")
-r_version_library_directory_path = Sys.getenv("R_VERSION_LIBRARY_DIRECTORY_RELATIVE_PATH")
-message(r_version_library_directory_path)
-
-# library_path <- file.path("/Users/lknecht/Repositories/FAUST_Nextflow_Desktop/electron_faust_nextflow_desktop/app/binaries/r",
-#                           r_version_library_directory_path)
-# .libPaths(library_path)
 
 library("BiocManager")
 
@@ -60,6 +54,7 @@ installBiocmanagerDependencies <- function(packages,
             # BiocManager::install(package_name,
             #                      lib = r_version_library_directory_path)
             BiocManager::install(package_name,
+                                 lib = library_path,
                                  # dependencies = TRUE
                                  )
         }
@@ -68,6 +63,7 @@ installBiocmanagerDependencies <- function(packages,
             #                      lib = r_version_library_directory_path,
             #                      version = package_version)
             BiocManager::install(package_name,
+                                 lib = library_path,
                                  # dependencies = TRUE,
                                  version = package_version)
         }

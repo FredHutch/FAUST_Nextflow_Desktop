@@ -52,11 +52,13 @@ installCranDependencies <- function(packages,
         print(package_version)
         if (is.na(package_version)) {
             install.packages(package_name, 
+                             lib = library_path,
                              # dependencies = TRUE,
                              repos = default_cran_repo_url)
         }
         else {
             install.packages(package_name,
+                             lib = library_path,
                              # dependencies = TRUE,
                              repos = default_cran_repo_url,
                              version = package_version

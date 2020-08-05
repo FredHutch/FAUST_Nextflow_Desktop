@@ -16,7 +16,7 @@ const app = require('electron');
 // Third-Party Libraries
 // -----------------------------------------------------------------------------
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 // -----------------------------------------------------------------------------
 // Custom Components
 // -----------------------------------------------------------------------------
@@ -32,19 +32,21 @@ import {
     RManagerStateContext,
     RManagerStatus
 } from '../r_manager';
-import { getShinyPagePath } from '../../constants/app_paths';
+// import { getShinyPagePath } from '../../constants/app_paths';
 import {
     getJavaHomeDirectoryPath,
     getNextflowExecutableFilePath,
-    getRTopLevelDirectoryPath,
+    // getRTopLevelDirectoryPath,
     getRDirectoryPath,
+    getRLibraryFilePath,
+    getRScriptFilePath,
     getStartShinyAppCommand,
     getShinyAppFilePath,
-    getShinyAppPort,
-    getShinyAppStartScriptFilePath,
-    getShinyAppURL,
-    getShinyAppStartScriptOutputFilePath,
-    shiny_start_script_name
+    // getShinyAppPort,
+    // getShinyAppStartScriptFilePath,
+    // getShinyAppURL,
+    getShinyAppStartScriptOutputFilePath
+    // shiny_start_script_name
 } from '../../constants/file_paths';
 // -----------------------------------------------------------------------------
 // Resources
@@ -70,7 +72,7 @@ export const ShinyManager = (props: IProps) => {
     // -----------
     // Hooks
     // -----------
-    const history: any = useHistory();
+    // const history: any = useHistory();
     // -----------
     // Context
     // -----------
@@ -154,12 +156,18 @@ export const ShinyManager = (props: IProps) => {
             //              Rscript is broken :'(
             // The same goes for Java
             // The same goes for the Shiny App out of convenience
-            // process.env.R_HOME_DIR = getRDirectoryPath();
-            // process.env.R_HOME = getRDirectoryPath();
+            process.env.R_HOME_DIR = getRDirectoryPath();
+            process.env.R_HOME = getRDirectoryPath();
+
+            process.env.R_LIBS = getRLibraryFilePath();
+            process.env.R_LIBS_USER = getRLibraryFilePath();
+            process.env.R_USER_SITE = getRLibraryFilePath();
+
             process.env.JAVA_HOME = getJavaHomeDirectoryPath();
             process.env.NXF_JAVA_HOME = getJavaHomeDirectoryPath();
             // ---
             process.env.FAUST_TOOLS_NEXTFLOW_EXECUTABLE_FILE_PATH = getNextflowExecutableFilePath();
+
             process.env.FAUST_TOOLS_SHINY_FILE_PATH = getShinyAppFilePath();
             process.env.FAUST_TOOLS_SHINY_URL = shiny_manager_state.shiny_host;
             process.env.FAUST_TOOLS_SHINY_PORT = `${shiny_manager_state.shiny_port}`;
@@ -167,10 +175,17 @@ export const ShinyManager = (props: IProps) => {
             console.log('-------------------------------');
             console.log('R_HOME_DIR: ' + process.env.R_HOME_DIR);
             console.log('R_HOME: ' + process.env.R_HOME);
+            console.log('R_LIBS: ' + process.env.R_LIBS);
+            console.log('R_LIBS_USER: ' + process.env.R_LIBS_USER);
+            console.log('R_USER_SITE: ' + process.env.R_USER_SITE);
+
+            console.log('R_SCRIPT_PATH: ' + getRScriptFilePath());
+
             console.log('JAVA_HOME: ' + process.env.JAVA_HOME);
             console.log('FAUST_TOOLS_SHINY_FILE_PATH: ' + process.env.FAUST_TOOLS_SHINY_FILE_PATH);
             console.log('FAUST_TOOLS_SHINY_URL: ' + process.env.FAUST_TOOLS_SHINY_URL);
             console.log('FAUST_TOOLS_SHINY_PORT: ' + process.env.FAUST_TOOLS_SHINY_PORT);
+            console.log('FAUST_TOOLS_R_LIBRARY: ' + process.env.FAUST_TOOLS_R_LIBRARY);
             console.log(
                 'FAUST_TOOLS_NEXTFLOW_EXECUTABLE_FILE_PATH: ' + process.env.FAUST_TOOLS_NEXTFLOW_EXECUTABLE_FILE_PATH
             );
