@@ -64,49 +64,48 @@ export const getRandomPort = (): number => {
 // ------------------------------------------------------------------------------
 export const getBinariesDirectoryPath = () => {
     let app_path: null | string = null;
-    // console.log("process.env.NODE_ENV: " + process.env.NODE_ENV);
-    // console.log("process.env.DEBUG_PROD: " + process.env.DEBUG_PROD);
+    console.log('process.env.NODE_ENV: ' + process.env.NODE_ENV);
+    console.log('process.env.DEBUG_PROD: ' + process.env.DEBUG_PROD);
     if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
         app_path = path.join('app');
     } else {
         app_path = path.join(app.getAppPath(), '..');
     }
-    // console.log('APP PATH: ' + app_path);
+    console.log('APP PATH: ' + app_path);
     const binaries_directory_path = path.join(app_path, binaries_directory_name);
-    // console.log('binaries_directory_path: ' + binaries_directory_path);
+    console.log('binaries_directory_path: ' + binaries_directory_path);
     return path.resolve(binaries_directory_path);
 };
 
 export const getRTopLevelDirectoryPath = () => {
     const r_top_level_directory_path = path.join(getBinariesDirectoryPath(), 'r');
-    // console.log('r_top_level_directory_path: ' + r_top_level_directory_path);
+    console.log('r_top_level_directory_path: ' + r_top_level_directory_path);
     return path.resolve(r_top_level_directory_path);
 };
 
 export const getRDirectoryPath = () => {
     const r_version = '4.0.2';
     const r_directory_path = path.join(getRTopLevelDirectoryPath(), 'r-mac', r_version, 'lib', 'R');
-    // console.log('r_directory_path: ' + r_directory_path);
+    console.log('r_directory_path: ' + r_directory_path);
     return path.resolve(r_directory_path);
 };
 
 export const getRFilePath = (): string => {
     const r_file_path = path.join(getRDirectoryPath(), 'bin', 'R');
-    // console.log('r_file_path: ' + r_file_path);
+    console.log('r_file_path: ' + r_file_path);
     return path.resolve(r_file_path);
 };
 
 export const getRScriptFilePath = () => {
     const r_script_file_path = path.join(getRDirectoryPath(), 'bin', 'Rscript');
-    // console.log('r_script_file_path: ' + r_script_file_path);
+    console.log('r_script_file_path: ' + r_script_file_path);
     return path.resolve(r_script_file_path);
 };
 
 export const getRLibraryFilePath = () => {
-    // const r_script_file_path = path.join(getRDirectoryPath(), 'library');
-    const r_script_file_path = path.join(getRDirectoryPath(), 'library');
-    // console.log('r_script_file_path: ' + r_script_file_path);
-    return path.resolve(r_script_file_path);
+    const r_library_file_path = path.join(getRDirectoryPath(), 'library');
+    console.log('r_library_file_path: ' + r_library_file_path);
+    return path.resolve(r_library_file_path);
 };
 
 // ------------------------------------------------------------------------------
@@ -114,14 +113,14 @@ export const getRLibraryFilePath = () => {
 // ------------------------------------------------------------------------------
 export const getShinyAppDirectoryPath = () => {
     let app_path: null | string = null;
-    // console.log(process.env.NODE_ENV);
-    // console.log(process.env.DEBUG_PROD);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.DEBUG_PROD);
     if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
         app_path = path.join('app');
     } else {
         app_path = path.join(app.getAppPath(), '..');
     }
-    // console.log('APP PATH: ' + app_path);
+    console.log('APP PATH: ' + app_path);
     const shiny_app_directory_path = path.join(app_path, shiny_app_directory_name);
     return path.resolve(shiny_app_directory_path);
 };
@@ -129,11 +128,16 @@ export const getShinyAppDirectoryPath = () => {
 export const getShinyAppStartScriptFilePath = () => {
     const shiny_app_directory_path = getShinyAppDirectoryPath();
     const shiny_app_start_script_file_path = path.join(shiny_app_directory_path, shiny_start_input_script_name);
-    return path.resolve(shiny_app_start_script_file_path);
+
+    const absolute_shiny_app_start_script_file_path = path.resolve(shiny_app_start_script_file_path);
+    console.log('absolute_shiny_app_start_script_file_path: ' + absolute_shiny_app_start_script_file_path);
+    return absolute_shiny_app_start_script_file_path;
 };
 export const getShinyAppStartScriptOutputFilePath = () => {
     const shiny_start_script_output_file_path = getShinyAppStartScriptFilePath() + '.R.out';
-    return path.resolve(shiny_start_script_output_file_path);
+    const absolute_shiny_start_script_output_file_path = path.resolve(shiny_start_script_output_file_path);
+    console.log('absolute_shiny_start_script_output_file_path: ' + absolute_shiny_start_script_output_file_path);
+    return absolute_shiny_start_script_output_file_path;
 };
 
 export const getStartShinyAppCommand = () => {
@@ -148,6 +152,7 @@ export const getStartShinyAppCommand = () => {
 
     const command_to_execute = `${r_script_file_path} --verbose ${shiny_start_script_input_file_path}`;
 
+    console.log('command_to_execute: ' + command_to_execute);
     return command_to_execute;
 };
 
@@ -155,7 +160,9 @@ export const getStartShinyAppCommand = () => {
 export const getShinyAppFilePath = (): string => {
     const shiny_app_directory_path = getShinyAppDirectoryPath();
     const shiny_app_file_path = path.join(shiny_app_directory_path, 'faust_tools', 'inst', 'NewFAUSTApp', 'app.R');
-    return path.resolve(shiny_app_file_path);
+    const absolute_shiny_app_file_path = path.resolve(shiny_app_file_path);
+    console.log('absolute_shiny_app_file_path: ' + absolute_shiny_app_file_path);
+    return absolute_shiny_app_file_path;
 };
 
 export const getShinyAppHost = (): string => {
@@ -169,7 +176,10 @@ export const getShinyAppPort = (): number => {};
 // ------------------------------------------------------------------------------
 export const getBinariesJavaDirectoryPath = () => {
     const binaries_java_directory_path = path.join(getBinariesDirectoryPath(), 'java');
-    return path.resolve(binaries_java_directory_path);
+    const absolute_binaries_java_directory_path = path.resolve(binaries_java_directory_path);
+
+    console.log('absolute_binaries_java_directory_path: ' + absolute_binaries_java_directory_path);
+    return absolute_binaries_java_directory_path;
 };
 
 export const getJavaHomeDirectoryPath = () => {
@@ -192,7 +202,10 @@ export const getJavaHomeDirectoryPath = () => {
 // ------------------------------------------------------------------------------
 export const getBinariesNextflowDirectoryPath = () => {
     const binaries_nextflow_directory_path = path.join(getBinariesDirectoryPath(), 'nextflow');
-    return path.resolve(binaries_nextflow_directory_path);
+    const absolute_binaries_nextflow_directory_path = path.resolve(binaries_nextflow_directory_path);
+
+    console.log('absolute_binaries_nextflow_directory_path: ' + absolute_binaries_nextflow_directory_path);
+    return absolute_binaries_nextflow_directory_path;
 };
 
 export const getNextflowExecutableFilePath = () => {
