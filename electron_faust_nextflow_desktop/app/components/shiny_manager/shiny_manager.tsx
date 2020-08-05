@@ -209,7 +209,8 @@ export const ShinyManager = (props: IProps) => {
                 //          This is placed in the `R_HOME_DIR`
                 //          So in order to know what happened we have to read it
                 const output_file_path = getShinyAppStartScriptOutputFilePath();
-                const output_file_contents = fs.readFileSync(output_file_path, 'utf8');
+                const does_output_file_exist = fs.existsSync(output_file_path)
+                const output_file_contents = does_output_file_exist ? fs.readFileSync(output_file_path, 'utf8') : '';
                 console.log('---------------------------------\nCommand was run!\n---------------------------------');
                 console.log(output_file_path);
                 console.log(error);
