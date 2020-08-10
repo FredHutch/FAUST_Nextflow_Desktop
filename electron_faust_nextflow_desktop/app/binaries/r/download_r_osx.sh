@@ -45,51 +45,18 @@ echo "-------------------------------------------------------------------------"
 # This MUST be invoked in the directory where the build files will be placed
 ./configure \
     --prefix=$INSTALLATION_DIRECTORY_ABSOLUTE_PATH \
-    --enable-R-shlib \
     --enable-R-static-lib \
-    --enable-BLAS-shlib
-
-# # DO NOT USE THIS IT IS BAD
-# # SEE: https://cran.r-project.org/doc/manuals/r-devel/R-admin.html#LAPACK
-# # --with-lapack
-# # --disable-rpath \
-# # --with-blas
-# USED FROM PUBLIC DOWNLOAD
-# ./configure \
-#     --prefix=$INSTALLATION_DIRECTORY_ABSOLUTE_PATH \
-#     'CC=clang -mmacosx-version-min=10.13' \
-#     'CXX=clang++ -mmacosx-version-min=10.13' \
-#     'OBJC=clang -mmacosx-version-min=10.13' \
-#     'FC=gfortran -mmacosx-version-min=10.13' \
-#     'F77=gfortran -mmacosx-version-min=10.13' \
-#     'CFLAGS=-Wall -g -O2' \
-#     'CXXFLAGS=-Wall -g -O2' \
-#     'OBJCFLAGS=-Wall -g -O2' \
-#     'FCFLAGS=-Wall -g -O2' \
-#     'F77FLAGS=-Wall -g -O2' \
-#     '--enable-memory-profiling' \
-#     '--x-libraries=/opt/X11/lib' \
-#     '--x-includes=/opt/X11/include' \
-#     '--build=x86_64-apple-darwin17.0' \
-#     'build_alias=x86_64-apple-darwin17.0' \
-#     'PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/local/lib/pkgconfig:/opt/X11/lib/pkgconfig'
-# # '--enable-R-framework' \
+    --enable-static \
+    --disable-rpath
 
 # Actual build entry point
-make
-make install
+make -j 2
+# make install
+# make install rhome=/usr/local/lib64/R-4.0.2
+make install rhome=${INSTALLATION_DIRECTORY_ABSOLUTE_PATH}/lib/R
 
 # Return to root directory
 cd ../../
-
-# # ------------------------------------------------------------------------------
-# # For some reason the `$R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH` has a `lib`
-# # directory that actually contains the ACTUAL R Files
-# # So you need to move the files of that directory to the correct directory in
-# # order to avoid errors like `ldpaths not found`
-# mkdir -p $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
-# # cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/lib/R/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
-# cp -r ${R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH}/* $R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
 
 # ------------------------------------------------------------------------------
 # Inject logic to override the initial configuration and point to the correct
@@ -106,7 +73,3 @@ sed -i.bak '/^R_HOME_DIR=/d' "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH
 sed -i.bak 's;/Library/Frameworks/R.framework/Resources;${R_HOME};g' "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R"
 chmod +x "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R"
 rm -f "${R_VERSION_FINAL_ARTIFACT_DIRECTORY_RELATIVE_PATH}/lib/R/bin/R".bak
-# # ------------------------------------------------------------------------------
-# # Perform Clean up - only the final artifact should remain
-# rm -fr $R_VERSION_BUILD_DIRECTORY_RELATIVE_PATH
-# rm -fr $R_VERSION_INSTALL_DIRECTORY_RELATIVE_PATH

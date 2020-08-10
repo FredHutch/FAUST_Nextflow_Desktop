@@ -34,6 +34,7 @@ export const getFAUSTWorkingDirectoryPath = () => {
     return faust_working_directory;
 };
 
+export const r_version = '4.0.2';
 export const binaries_directory_name = 'binaries';
 export const shiny_app_directory_name = 'shiny_apps';
 export const shiny_start_input_script_name = 'start_shiny_app.r';
@@ -83,9 +84,15 @@ export const getRTopLevelDirectoryPath = () => {
     return path.resolve(r_top_level_directory_path);
 };
 
+export const getRHomeDirectory = () => {
+    const r_home_directory = path.join(getBinariesDirectoryPath(), 'r', 'r-mac', r_version);
+    const absolute_r_home_directory = path.resolve(r_home_directory);
+    console.log('absolute_r_home_directory: ' + absolute_r_home_directory);
+    return absolute_r_home_directory;
+};
+
 export const getRDirectoryPath = () => {
-    const r_version = '4.0.2';
-    const r_directory_path = path.join(getRTopLevelDirectoryPath(), 'r-mac', r_version, 'lib', 'R');
+    const r_directory_path = path.join(getRTopLevelDirectoryPath(), 'r-mac', r_version);
     console.log('r_directory_path: ' + r_directory_path);
     return path.resolve(r_directory_path);
 };
@@ -103,7 +110,7 @@ export const getRScriptFilePath = () => {
 };
 
 export const getRLibraryFilePath = () => {
-    const r_library_file_path = path.join(getRDirectoryPath(), 'library');
+    const r_library_file_path = path.join(getRHomeDirectory(), 'library');
     console.log('r_library_file_path: ' + r_library_file_path);
     return path.resolve(r_library_file_path);
 };
@@ -141,16 +148,16 @@ export const getShinyAppStartScriptOutputFilePath = () => {
 };
 
 export const getStartShinyAppCommand = () => {
-    // const r_file_path = getRFilePath();
-    // const shiny_start_script_input_file_path = getShinyAppStartScriptFilePath();
-    // const shiny_start_script_output_file_path = getShinyAppStartScriptOutputFilePath();
-
-    // const command_to_execute = `${r_file_path} CMD BATCH --verbose ${shiny_start_script_input_file_path} ${shiny_start_script_output_file_path}`;
-    // -------------------------------------------------------------------------
-    const r_script_file_path = getRScriptFilePath();
+    const r_file_path = getRFilePath();
     const shiny_start_script_input_file_path = getShinyAppStartScriptFilePath();
+    const shiny_start_script_output_file_path = getShinyAppStartScriptOutputFilePath();
 
-    const command_to_execute = `${r_script_file_path} --verbose ${shiny_start_script_input_file_path}`;
+    const command_to_execute = `${r_file_path} CMD BATCH --verbose ${shiny_start_script_input_file_path} ${shiny_start_script_output_file_path}`;
+    // -------------------------------------------------------------------------
+    // const r_script_file_path = getRScriptFilePath();
+    // const shiny_start_script_input_file_path = getShinyAppStartScriptFilePath();
+
+    // const command_to_execute = `${r_script_file_path} --verbose ${shiny_start_script_input_file_path}`;
 
     console.log('command_to_execute: ' + command_to_execute);
     return command_to_execute;

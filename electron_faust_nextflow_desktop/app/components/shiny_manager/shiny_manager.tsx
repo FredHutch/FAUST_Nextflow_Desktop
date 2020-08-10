@@ -37,6 +37,7 @@ import {
     getJavaHomeDirectoryPath,
     getNextflowExecutableFilePath,
     // getRTopLevelDirectoryPath,
+    getRHomeDirectory,
     getRDirectoryPath,
     getRLibraryFilePath,
     getRScriptFilePath,
@@ -156,12 +157,14 @@ export const ShinyManager = (props: IProps) => {
             //              Rscript is broken :'(
             // The same goes for Java
             // The same goes for the Shiny App out of convenience
-            process.env.R_HOME_DIR = getRDirectoryPath();
-            process.env.R_HOME = getRDirectoryPath();
+            process.env.R_HOME_DIR = getRHomeDirectory();
+            process.env.R_HOME = getRHomeDirectory();
+            // TODO: Remove this probably doesn't work
+            process.env.RHOME = getRHomeDirectory();
 
             process.env.R_LIBS = getRLibraryFilePath();
             process.env.R_LIBS_USER = getRLibraryFilePath();
-            process.env.R_USER_SITE = getRLibraryFilePath();
+            process.env.R_LIBS_SITE = getRLibraryFilePath();
 
             process.env.JAVA_HOME = getJavaHomeDirectoryPath();
             process.env.NXF_JAVA_HOME = getJavaHomeDirectoryPath();
@@ -177,7 +180,7 @@ export const ShinyManager = (props: IProps) => {
             console.log('R_HOME: ' + process.env.R_HOME);
             console.log('R_LIBS: ' + process.env.R_LIBS);
             console.log('R_LIBS_USER: ' + process.env.R_LIBS_USER);
-            console.log('R_USER_SITE: ' + process.env.R_USER_SITE);
+            console.log('R_LIBS_SITE: ' + process.env.R_LIBS_SITE);
 
             console.log('R_SCRIPT_PATH: ' + getRScriptFilePath());
 
@@ -209,7 +212,7 @@ export const ShinyManager = (props: IProps) => {
                 //          This is placed in the `R_HOME_DIR`
                 //          So in order to know what happened we have to read it
                 const output_file_path = getShinyAppStartScriptOutputFilePath();
-                const does_output_file_exist = fs.existsSync(output_file_path)
+                const does_output_file_exist = fs.existsSync(output_file_path);
                 const output_file_contents = does_output_file_exist ? fs.readFileSync(output_file_path, 'utf8') : '';
                 console.log('---------------------------------\nCommand was run!\n---------------------------------');
                 console.log(output_file_path);
