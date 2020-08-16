@@ -1,6 +1,6 @@
 {
-    "name": "electron-react-boilerplate",
-    "productName": "ElectronReact",
+    "name": "FAUST_Nextflow_Desktop",
+    "productName": "FAUST_Nextflow_Desktop",
     "version": "1.1.0",
     "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
     "scripts": {
@@ -53,7 +53,7 @@
         ]
     },
     "build": {
-        "productName": "ElectronReact",
+        "productName": "FAUST_Nextflow_Desktop",
         "appId": "org.develar.ElectronReact",
         "files": [
             "dist/",
